@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentX — 双引擎 AI 团队部署</title>
+<link rel="icon" type="image/svg+xml" href="brand/avatar.svg">
+<link rel="alternate icon" type="image/png" href="brand/favicon.png">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg-card: #13131a;
+    --border: #1e1e2e;
+    --text: #e4e4ec;
+    --text-dim: #8888a0;
+    --accent: #a78bfa;
+    --accent2: #7c3aed;
+    --green: #34d399;
+    --blue: #60a5fa;
+    --gold: #fbbf24;
+    --gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #60a5fa 100%);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Nav ─────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-weight: 700; font-size: 18px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; }
+  .nav-logo svg { -webkit-text-fill-color: initial; flex-shrink: 0; }
+  .nav-cta { padding: 8px 20px; border-radius: 8px; background: var(--accent2); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; transition: opacity .2s; }
+  .nav-cta:hover { opacity: .85; }
+
+  /* ── Hero ────────────────────────────── */
+  .hero {
+    padding: 160px 24px 100px; text-align: center; max-width: 720px; margin: 0 auto;
+    position: relative;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block; padding: 6px 16px; border-radius: 20px;
+    background: rgba(124,58,237,0.15); color: var(--accent); font-size: 13px;
+    font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(124,58,237,0.3);
+    position: relative;
+  }
+  .hero h1 { font-size: clamp(36px, 6vw, 56px); font-weight: 800; line-height: 1.15; margin-bottom: 20px; position: relative; }
+  .hero h1 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { color: var(--text-dim); font-size: 18px; max-width: 520px; margin: 0 auto 36px; position: relative; }
+  .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn-primary { padding: 14px 32px; border-radius: 12px; background: var(--accent2); color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; transition: all .2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.35); }
+  .btn-secondary { padding: 14px 32px; border-radius: 12px; border: 1px solid var(--border); color: var(--text); text-decoration: none; font-weight: 600; font-size: 16px; transition: all .2s; }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Sections ────────────────────────── */
+  section { padding: 80px 24px; }
+  .section-header { text-align: center; max-width: 600px; margin: 0 auto 60px; }
+  .section-header h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+  .section-header p { color: var(--text-dim); font-size: 16px; }
+
+  /* ── Pricing ─────────────────────────── */
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px; max-width: 1000px; margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 36px 28px; position: relative; transition: all .3s;
+  }
+  .pricing-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .pricing-card.featured { border-color: var(--accent2); box-shadow: 0 0 40px rgba(124,58,237,0.1); }
+  .pricing-card.featured::before {
+    content: '🔥 早鸟推荐'; position: absolute; top: -12px; right: 24px;
+    background: var(--gradient); color: #fff; padding: 4px 14px; border-radius: 12px;
+    font-size: 12px; font-weight: 700;
+  }
+  .pricing-card h3 { font-size: 20px; margin-bottom: 8px; }
+  .pricing-card .price { font-size: 36px; font-weight: 800; margin: 16px 0 4px; }
+  .pricing-card .price sub { font-size: 14px; color: var(--text-dim); font-weight: 400; }
+  /* Early bird */
+  .early-bird-banner { max-width: 600px; margin: 0 auto 32px; text-align: center; padding: 12px 20px; border-radius: 10px; background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25); color: var(--accent); font-size: 15px; font-weight: 600; }
+  .price-original { font-size: 18px; color: var(--text-dim); text-decoration: line-through; margin-right: 10px; font-weight: 400; display: inline-block; vertical-align: middle; }
+  .price-early { font-size: 36px; font-weight: 800; color: var(--accent); display: inline-block; vertical-align: middle; }
+  .early-bird-tag { display: inline-block; background: var(--accent2); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 6px; vertical-align: middle; }
+  .pricing-card .desc { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; }
+  .pricing-card ul { list-style: none; margin-bottom: 28px; }
+  .pricing-card ul li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .pricing-card ul li::before { content: '✓'; color: var(--green); font-weight: 700; }
+  .card-btn { display: block; text-align: center; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all .2s; }
+  .card-btn.primary { background: var(--accent2); color: #fff; }
+  .card-btn.primary:hover { opacity: .85; }
+  .card-btn.outline { border: 1px solid var(--border); color: var(--text); }
+  .card-btn.outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Process ──────────────────────────── */
+  .process-steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 560px; margin: 0 auto; }
+  .step { text-align: center; }
+  .step-num { width: 56px; height: 56px; border-radius: 16px; background: var(--gradient); color: #fff; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .step h4 { font-size: 16px; margin-bottom: 6px; }
+  .step p { color: var(--text-dim); font-size: 14px; }
+
+  /* ── Why Us ──────────────────────────── */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+  .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+  .feature-card .icon { font-size: 28px; margin-bottom: 12px; }
+  .feature-card h4 { font-size: 16px; margin-bottom: 6px; }
+  .feature-card p { color: var(--text-dim); font-size: 14px; line-height: 1.5; }
+
+  /* ── FAQ ─────────────────────────────── */
+  .faq-list { max-width: 650px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .faq-q { font-weight: 700; font-size: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .faq-a { color: var(--text-dim); font-size: 14px; margin-top: 10px; display: none; }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CTA ─────────────────────────────── */
+  .cta-section { text-align: center; padding: 100px 24px; }
+  .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
+  .cta-section p { color: var(--text-dim); font-size: 16px; margin-bottom: 32px; }
+  .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Footer ──────────────────────────── */
+  footer { text-align: center; padding: 40px 24px; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+
+  /* ── Responsive ──────────────────────── */
+  @media (max-width: 640px) {
+    .hero { padding: 120px 20px 60px; }
+    .hero h1 { font-size: 30px; }
+    section { padding: 50px 16px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 44 44" style="display:inline-block;vertical-align:middle;margin-right:8px;margin-top:-2px;">
+      <polygon points="6,4 10,4 37,38 34,38" fill="#8b5cf6"/>
+      <polygon points="38,4 34,4 7,38 10,38" fill="#3b82f6"/>
+    </svg>AgentX
+  </div>
+  <a href="#cta" class="nav-cta">预约咨询</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">⚡ Claude Code × Hermes 双引擎协同</div>
+  <h1>为你的业务，<span>部署 AI 团队</span></h1>
+  <p>不用啃文档、不用踩坑。我帮你把最强开源 AI Agent 装好配好，让你直接拥有一个 24 小时待命的数字员工。</p>
+  <div class="hero-buttons">
+    <a href="#pricing" class="btn-primary">查看服务 →</a>
+    <a href="#process" class="btn-secondary">怎么做到的？</a>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="section-header">
+    <h2>服务与定价</h2>
+    <p>从零到 AI Ready，全程远程交付，你只需准备好电脑</p>
+  </div>
+  <div class="early-bird-banner">🔥 前 10 单享 6 折早鸟价，满额即恢复原价</div>
+  <div class="pricing-grid">
+    <!-- Basic -->
+    <div class="pricing-card">
+      <h3>🟢 基础配置</h3>
+      <div class="price"><span class="price-original">¥599</span><span class="price-early">¥299</span><span class="early-bird-tag">早鸟</span><sub>/次</sub></div>
+      <p class="desc">让 Hermes Agent 跑起来</p>
+      <ul>
+        <li>Hermes Agent 安装部署</li>
+        <li>DeepSeek / Claude 模型接入</li>
+        <li>基础 MEMORY & USER 定制</li>
+        <li>CLI 使用教学（30min）</li>
+        <li>7 天售后支持</li>
+      </ul>
+      <a href="#cta" class="card-btn outline">预约 →</a>
+    </div>
+    <!-- Standard -->
+    <div class="pricing-card featured">
+      <h3>🔵 双 Agent 协同</h3>
+      <div class="price"><span class="price-original">¥1,999</span><span class="price-early">¥799</span><span class="early-bird-tag">早鸟</span><sub>/次</sub></div>
+      <p class="desc">Claude Code + Hermes 双引擎</p>
+      <ul>
+        <li>✅ 基础配置全部内容</li>
+        <li>Claude Code 安装与配置</li>
+        <li>双 Agent 协同工作流搭建</li>
+        <li>CLAUDE.md + 项目结构定制</li>
+        <li>20+ 核心技能安装激活</li>
+        <li>1 小时实操带教</li>
+        <li>14 天售后支持</li>
+      </ul>
+      <a href="#cta" class="card-btn primary">立即预约 →</a>
+    </div>
+    <!-- Premium -->
+    <div class="pricing-card">
+      <h3>🟣 企业全栈部署</h3>
+      <div class="price"><span class="price-original">¥3,999</span><span class="price-early">¥1,999</span><span class="early-bird-tag">早鸟</span><sub>/次</sub></div>
+      <p class="desc">多平台接入 + 自动化工作流</p>
+      <ul>
+        <li>✅ 双 Agent 协同全部内容</li>
+        <li>Gateway 网关配置（微信/飞书/钉钉/Telegram）</li>
+        <li>Cron 定时任务定制（5条）</li>
+        <li>业务专属技能开发（3个）</li>
+        <li>MCP 工具集成</li>
+        <li>安全加固与权限配置</li>
+        <li>1 周贴身陪跑</li>
+        <li>30 天售后支持</li>
+      </ul>
+      <a href="#cta" class="card-btn outline">预约 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section id="process">
+  <div class="section-header">
+    <h2>四步到位</h2>
+    <p>不用懂技术，你只需要告诉我你的需求</p>
+  </div>
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>需求沟通</h4>
+      <p>你用自然语言描述日常工作中想自动化的事情</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>远程部署</h4>
+      <p>我远程帮你安装配置，或提供详细操作指南</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>带教上手</h4>
+      <p>视频/语音教学，确保你会日常使用和基本维护</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>持续优化</h4>
+      <p>Hermes 会根据你的使用习惯自动进化，越用越顺手</p>
+    </div>
+  </div>
+</section>
+
+<!-- Why Us -->
+<section>
+  <div class="section-header">
+    <h2>为什么选我？</h2>
+    <p>市面上能做 AI Agent 部署的人不少，但能打通 Claude Code + Hermes 双引擎协同的，不多</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="icon">🎯</div>
+      <h4>双 Agent 协同专家</h4>
+      <p>市面上唯一打通 Claude Code（写代码）+ Hermes（自动化运营）协同工作流的服务商。</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔧</div>
+      <h4>实战踩坑经验</h4>
+      <p>自己趟过安装、配置、模型接入、国内网络适配的所有坑，你不用再踩一遍。</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📈</div>
+      <h4>越用越强</h4>
+      <p>Hermes 的自进化机制意味着你花的钱不会贬值——Agent 每天都在变得更懂你的业务。</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🛡️</div>
+      <h4>安全第一</h4>
+      <p>本地部署、数据不出你电脑、零遥测。API Key 加密存储，7 层安全防线。</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💬</div>
+      <h4>中文原生支持</h4>
+      <p>全中文配置、中文沟通、中文文档。不用啃英文技术文档。</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">⚡</div>
+      <h4>极速交付</h4>
+      <p>标准版 2 小时内交付可用。企业版 3 天内完成全栈部署。不拖工期。</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="section-header">
+    <h2>常见问题</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">我需要准备什么？<span>▾</span></div>
+      <div class="faq-a">一台电脑（Mac/Win/Linux 均可），稳定的网络，以及你想用 AI 解决的工作痛点。其余我来搞定。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">后续使用还需要付费吗？<span>▾</span></div>
+      <div class="faq-a">Agent 本身免费开源。你只需要付 AI 模型的 API 费用（如 DeepSeek 约 ¥1-3/百万 token，日常使用月均几十元）。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">我的数据安全吗？<span>▾</span></div>
+      <div class="faq-a">全部本地部署，数据不经过第三方服务器。API 调用仅发送当前对话上下文，不存储在你的电脑之外。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">适合哪些人？<span>▾</span></div>
+      <div class="faq-a">独立开发者、自媒体创作者、咨询顾问、中小企业技术负责人——任何想用 AI 提效但不想花时间折腾配置的人。</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta-section">
+  <h2>准备好拥有你的 AI 团队了吗？</h2>
+  <p>直接联系我，24 小时内回复，免费聊聊你的需求。</p>
+  <div class="cta-buttons">
+    <a href="mailto:chenxu985ca@gmail.com" class="btn-primary">📧 chenxu985ca@gmail.com</a>
+    <a href="#" class="btn-secondary" onclick="navigator.clipboard.writeText('Lee251015');this.textContent='✅ 已复制';setTimeout(()=>this.textContent='💬 微信: Lee251015',2000);return false;">💬 微信: Lee251015</a>
+    <a href="tel:+8619115160399" class="btn-secondary">📞 19115160399</a>
+  </div>
+  <div style="margin-top: 24px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; font-size: 14px; color: var(--text-dim);">
+    <span>📧 chenxu985ca@gmail.com</span>
+    <span>💬 微信/手机：Lee251015 / 19115160399</span>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 AgentX · 双引擎 AI 团队部署</p>
+  <p style="font-size:12px;margin-top:4px;">联系：chenxu985ca@gmail.com | 微信 Lee251015 | 电话 19115160399</p>
+</footer>
+
+</body>
+</html>
