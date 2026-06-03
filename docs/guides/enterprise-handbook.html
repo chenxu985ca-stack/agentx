@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentX 企业全栈部署手册</title>
+<style>
+  :root {
+    --bg: #0a0a12;
+    --surface: #12121f;
+    --border: #1e1e35;
+    --text: #e4e4ec;
+    --text-dim: #8888a8;
+    --accent: #7c3aed;
+    --accent-light: #a78bfa;
+    --blue: #60a5fa;
+    --green: #34d399;
+    --amber: #f59e0b;
+    --code-bg: #0d0d1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+  header {
+    text-align: center;
+    padding: 40px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .logo {
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    background: linear-gradient(135deg, #7c3aed, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  nav {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  nav h3 { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  nav ol { padding-left: 18px; font-size: 14px; }
+  nav li { margin: 4px 0; }
+  nav a { color: var(--accent-light); text-decoration: none; }
+  nav a:hover { color: #fff; }
+  h1 { font-size: 22px; margin: 32px 0 16px; color: #fff; }
+  h2 {
+    font-size: 18px;
+    margin: 40px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent-light);
+  }
+  h3 { font-size: 15px; margin: 24px 0 10px; color: var(--blue); }
+  p { margin: 10px 0; color: var(--text-dim); }
+  strong { color: #fff; }
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--accent-light);
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 14px 0;
+  }
+  pre code { background: none; padding: 0; color: var(--text); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--surface);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 16px;
+    margin: 14px 0;
+    background: rgba(124,58,237,0.05);
+    border-radius: 0 6px 6px 0;
+  }
+  ul, ol { padding-left: 22px; margin: 10px 0; color: var(--text-dim); }
+  li { margin: 6px 0; }
+  a { color: var(--accent-light); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .arch {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+  }
+  .checklist li { padding: 4px 0; }
+  .done { color: var(--green); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .card h3 { margin-top: 0; }
+  .warn {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .warn::before { content: "⚠️ "; }
+  .divider {
+    text-align: center;
+    color: var(--accent);
+    font-size: 20px;
+    margin: 32px 0;
+    letter-spacing: 8px;
+  }
+  @media (max-width: 480px) {
+    body { padding: 16px 14px 40px; }
+    pre, .arch { font-size: 11px; padding: 12px 14px; }
+    h1 { font-size: 20px; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AGENTX</div>
+  <div class="subtitle">企业全栈部署手册 · 企业版</div>
+</header>
+
+<nav>
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#s1">架构总览</a></li>
+    <li><a href="#s2">Gateway 多平台接入</a></li>
+    <li><a href="#s3">Cron 定时任务</a></li>
+    <li><a href="#s4">业务专属技能开发</a></li>
+    <li><a href="#s5">MCP 工具集成</a></li>
+    <li><a href="#s6">安全加固</a></li>
+    <li><a href="#s7">团队使用指南</a></li>
+    <li><a href="#s8">运维与监控</a></li>
+  </ol>
+</nav>
+
+<h1>🏢 企业全栈部署手册</h1>
+<p>欢迎使用 AgentX 企业版。你的 AI 系统已完整部署，包括多平台接入、自动化任务、业务定制和安全加固。本手册涵盖所有配置和维护信息。</p>
+
+<h2 id="s1">1. 架构总览</h2>
+
+<p>你的企业 AI 系统架构：</p>
+
+<div class="arch">                         ┌─────────────────────┐
+                         │    DeepSeek API      │
+                         └──────────┬──────────┘
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+     ┌────────▼────────┐   ┌───────▼───────┐   ┌────────▼────────┐
+     │   Claude Code    │   │    Hermes     │   │   Custom MCP    │
+     │  (代码引擎)       │   │  (助理引擎)    │   │   (工具扩展)     │
+     └────────┬────────┘   └───────┬───────┘   └────────┬────────┘
+              │                    │                     │
+              └────────────────────┼─────────────────────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+              ┌─────▼─────┐ ┌─────▼─────┐ ┌─────▼─────┐
+              │ Telegram  │ │   飞书     │ │  微信/钉钉 │
+              └───────────┘ └───────────┘ └───────────┘</div>
+
+<div class="divider">···</div>
+
+<h2 id="s2">2. Gateway 多平台接入</h2>
+
+<p>Gateway 让 AI Agent 可以接收来自不同平台的消息并统一处理。<strong>团队成员在对应平台 @Agent 即可使用</strong>。</p>
+
+<h3>已配置平台</h3>
+<table>
+  <tr><th>平台</th><th>状态</th><th>用途</th></tr>
+  <tr><td>[平台1]</td><td>✅ 已配置</td><td>日常团队沟通</td></tr>
+  <tr><td>[平台2]</td><td>✅ 已配置</td><td>客户通知</td></tr>
+  <tr><td>[平台3]</td><td>✅ 已配置</td><td>自动化工作流</td></tr>
+</table>
+
+<h3>使用方式</h3>
+<pre><code>@AgentX 今天的竞品动态汇总
+@AgentX 帮我查一下 React 19 的发布说明
+@AgentX 提醒我下午 3 点开会</code></pre>
+<p>Agent 会在同一平台回复，<strong>不需要打开终端</strong>。</p>
+
+<h3>安全策略（allowlist）</h3>
+<p>当前只允许以下用户/群组与 Agent 交互：</p>
+<pre><code># Telegram
+allowlist:
+  users: [@xxx, @xxx]
+  groups: [@xxx_team]
+
+# 飞书
+allowlist:
+  users: [xxx, xxx]
+  chats: [xxx_tech_group]</code></pre>
+
+<div class="warn">如需添加新成员，联系我修改 allowlist。这是为了防止未授权用户滥用 API token。</div>
+
+<h3>可扩展平台</h3>
+<p>Telegram / Discord / Slack（海外） · 飞书 / 钉钉 / 企业微信（国内） · 自定义 Webhook</p>
+
+<h2 id="s3">3. Cron 定时任务</h2>
+
+<p>定时任务是 Hermes 的自动化核心——设定后 Agent 按时自动执行。</p>
+
+<h3>你的定时任务</h3>
+<table>
+  <tr><th>#</th><th>任务名</th><th>执行时间</th><th>内容</th></tr>
+  <tr><td>1</td><td>[任务1]</td><td>每天 9:00</td><td>[描述]</td></tr>
+  <tr><td>2</td><td>[任务2]</td><td>每天 18:00</td><td>[描述]</td></tr>
+  <tr><td>3</td><td>[任务3]</td><td>每周一 10:00</td><td>[描述]</td></tr>
+  <tr><td>4</td><td>[任务4]</td><td>[时间]</td><td>[描述]</td></tr>
+  <tr><td>5</td><td>[任务5]</td><td>[时间]</td><td>[描述]</td></tr>
+</table>
+
+<h3>管理命令</h3>
+<pre><code>hermes cronjob list                      # 查看所有任务
+hermes cronjob logs --name "任务名"       # 查看执行日志
+hermes cronjob trigger --name "任务名"    # 手动触发（测试用）
+hermes cronjob pause --name "任务名"      # 暂停
+hermes cronjob resume --name "任务名"     # 恢复</code></pre>
+
+<h3>Cron 表达式速查</h3>
+<table>
+  <tr><th>场景</th><th>表达式</th></tr>
+  <tr><td>每天 9:00</td><td><code>0 9 * * *</code></td></tr>
+  <tr><td>每天 18:00</td><td><code>0 18 * * *</code></td></tr>
+  <tr><td>每周一 10:00</td><td><code>0 10 * * 1</code></td></tr>
+  <tr><td>每 30 分钟</td><td><code>*/30 * * * *</code></td></tr>
+  <tr><td>每月 1 号 9:00</td><td><code>0 9 1 * *</code></td></tr>
+</table>
+
+<h3>创建新任务示例</h3>
+<pre><code># 每日竞品监测
+hermes cronjob create \
+  --name "每日竞品监测" \
+  --cron "57 8 * * *" \
+  --prompt "搜索 [竞品名] 的最新动态，总结三条要点，发到团队群"
+
+# 每周开发周报
+hermes cronjob create \
+  --name "每周开发周报" \
+  --cron "3 18 * * 5" \
+  --prompt "分析本周 git 提交，生成开发周报：完成功能、修复 bug、下周计划"</code></pre>
+
+<h2 id="s4">4. 业务专属技能开发</h2>
+
+<p>你的企业有 <strong>3 个自定义技能</strong>，存放在 <code>~/.hermes/skills/custom/</code>。</p>
+
+<h3>技能清单</h3>
+<table>
+  <tr><th>技能名</th><th>触发方式</th><th>功能</th></tr>
+  <tr><td>[技能1]</td><td>「帮我做 XXX」</td><td>[描述]</td></tr>
+  <tr><td>[技能2]</td><td>「帮我做 XXX」</td><td>[描述]</td></tr>
+  <tr><td>[技能3]</td><td>「帮我做 XXX」</td><td>[描述]</td></tr>
+</table>
+
+<h3>文件结构</h3>
+<pre><code>~/.hermes/skills/custom/
+├── [skill-1]/
+│   └── skill.md
+├── [skill-2]/
+│   └── skill.md
+└── [skill-3]/
+    └── skill.md</code></pre>
+
+<p>技能是纯文本 Markdown 文件，直接编辑即可，修改后无需重启自动生效。</p>
+
+<h2 id="s5">5. MCP 工具集成</h2>
+
+<p>MCP（Model Context Protocol）让 Agent 直接操作外部工具。</p>
+
+<h3>已集成</h3>
+<table>
+  <tr><th>工具</th><th>用途</th></tr>
+  <tr><td>[工具1]</td><td>[用途]</td></tr>
+  <tr><td>[工具2]</td><td>[用途]</td></tr>
+  <tr><td>[工具3]</td><td>[用途]</td></tr>
+</table>
+
+<h3>可扩展的 MCP 工具</h3>
+<ul>
+  <li><strong>GitHub MCP</strong> — Issue/PR 管理、代码搜索</li>
+  <li><strong>Notion MCP</strong> — 文档读写、数据库查询</li>
+  <li><strong>飞书 MCP</strong> — 消息发送、文档操作</li>
+  <li><strong>Slack MCP</strong> — 频道消息、文件上传</li>
+  <li><strong>PostgreSQL / MySQL MCP</strong> — 数据库直接查询</li>
+</ul>
+
+<p>添加新工具联系我，配置时间约 20-40 分钟/个。</p>
+
+<h2 id="s6">6. 安全加固</h2>
+
+<h3>已实施的安全措施</h3>
+<ul class="checklist">
+  <li><span class="done">✅</span> API Key 权限最小化（DeepSeek Key 仅限 API 调用）</li>
+  <li><span class="done">✅</span> Gateway allowlist（只允许指定用户/群）</li>
+  <li><span class="done">✅</span> 敏感文件权限设置（<code>.env</code> 仅当前用户可读）</li>
+  <li><span class="done">✅</span> Tirith 安全扫描已配置</li>
+  <li><span class="done">✅</span> 命令执行确认（高危操作需二次确认）</li>
+</ul>
+
+<h3>每月安全检查</h3>
+<ol>
+  <li>检查 API 用量：登录 DeepSeek 后台 → 查看本月消耗</li>
+  <li>检查 Gateway 日志：<code>hermes gateway logs --since "30 days ago" | grep ERROR</code></li>
+  <li>更新 Hermes：<code>hermes update</code></li>
+</ol>
+
+<div class="card">
+<h3>🚨 API Key 泄露应急流程</h3>
+<ol>
+  <li>立即登录 DeepSeek 后台 → 删除泄露的 Key</li>
+  <li>生成新 Key</li>
+  <li>更新 <code>~/.hermes/.env</code></li>
+  <li>重启 Hermes</li>
+  <li>联系我确认安全</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>👤 团队成员离职流程</h3>
+<ol>
+  <li>从 Gateway allowlist 移除该成员</li>
+  <li>如果该成员接触过 API Key，轮换所有 Key</li>
+  <li>检查最近的执行日志是否有异常操作</li>
+</ol>
+</div>
+
+<h2 id="s7">7. 团队使用指南</h2>
+
+<h3>角色与权限</h3>
+<table>
+  <tr><th>角色</th><th>能做什么</th><th>不能做什么</th></tr>
+  <tr><td><strong>管理员</strong>（你）</td><td>全部操作、修改配置、管理成员</td><td>-</td></tr>
+  <tr><td><strong>开发者</strong></td><td>通过平台 @Agent 提问、使用定时任务输出</td><td>修改 Agent 配置</td></tr>
+  <tr><td><strong>查看者</strong></td><td>接收定时任务推送</td><td>直接与 Agent 交互</td></tr>
+</table>
+
+<h3>团队接入步骤</h3>
+<ol>
+  <li>成员在对应平台加入团队群</li>
+  <li>管理员将成员 ID 加入 allowlist</li>
+  <li>成员发送 <code>@AgentX 你好</code> 测试</li>
+  <li>收到回复即接入成功</li>
+</ol>
+
+<h3>提问最佳实践</h3>
+<ul>
+  <li><strong>具体比模糊好：</strong>「查上周销售数据」>「查数据」</li>
+  <li><strong>给上下文：</strong>「Next.js 14，App Router 模式，想加一个…」</li>
+  <li><strong>追问别怕：</strong>「再详细点」「给我代码示例」</li>
+</ul>
+
+<div class="warn">复杂任务让一个人统一与 Agent 对话，避免多人同时下指令造成混淆。</div>
+
+<h2 id="s8">8. 运维与监控</h2>
+
+<h3>每周检查（手动，5 分钟）</h3>
+<pre><code>hermes cronjob list              # 确认任务状态正常
+hermes gateway logs --since "7 days ago" | tail -20  # 扫一眼异常</code></pre>
+
+<h3>每月检查（手动，10 分钟）</h3>
+<ol>
+  <li>登录 DeepSeek 后台查用量</li>
+  <li>检查磁盘空间（对话日志会累积）</li>
+  <li>备份自定义技能文件</li>
+  <li>评估是否需要调整定时任务</li>
+</ol>
+
+<h3>备份命令</h3>
+<pre><code>tar -czf agentx-backup-$(date +%Y%m%d).tar.gz \
+  ~/.hermes/skills/custom/ \
+  ~/.hermes/.env \
+  ~/.hermes/config.yaml \
+  ~/.hermes/USER.md \
+  ~/.claude/CLAUDE.md</code></pre>
+
+<h3>升级流程</h3>
+<ol>
+  <li>备份当前配置（见上面）</li>
+  <li>更新 Hermes：<code>hermes update</code></li>
+  <li>更新 Claude Code：<code>claude --update</code></li>
+  <li>测试：各发一条消息确认正常</li>
+</ol>
+
+<hr>
+
+<h2>附录 A：配置信息速查</h2>
+<table>
+  <tr><td>Hermes 版本</td><td>v0.15.1</td></tr>
+  <tr><td>默认模型</td><td>deepseek-v4-pro</td></tr>
+  <tr><td>API 提供商</td><td>DeepSeek</td></tr>
+  <tr><td>Gateway 平台数</td><td>[N]</td></tr>
+  <tr><td>Cron 任务数</td><td>[N]</td></tr>
+  <tr><td>自定义技能数</td><td>3</td></tr>
+  <tr><td>MCP 工具数</td><td>[N]</td></tr>
+</table>
+
+<h2>附录 B：联系支持</h2>
+<ul>
+  <li>微信：[你的微信]</li>
+  <li>邮箱：[你的邮箱]</li>
+  <li>紧急联系：[电话]</li>
+  <li>陪跑期：交付后 7 天（工作日 9:00-21:00 随时响应）</li>
+  <li>后续支持：按次付费或签订年维护合同</li>
+</ul>
+
+<footer>
+  AgentX · 企业级 AI 团队，全栈部署，持续运行
+</footer>
+
+</body>
+</html>

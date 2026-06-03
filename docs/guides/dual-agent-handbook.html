@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentX 双 Agent 协同使用手册</title>
+<style>
+  :root {
+    --bg: #0a0a12;
+    --surface: #12121f;
+    --border: #1e1e35;
+    --text: #e4e4ec;
+    --text-dim: #8888a8;
+    --accent: #7c3aed;
+    --accent-light: #a78bfa;
+    --blue: #60a5fa;
+    --green: #34d399;
+    --code-bg: #0d0d1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+  header {
+    text-align: center;
+    padding: 40px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .logo {
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    background: linear-gradient(135deg, #7c3aed, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  nav {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  nav h3 { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  nav ol { padding-left: 18px; font-size: 14px; }
+  nav li { margin: 4px 0; }
+  nav a { color: var(--accent-light); text-decoration: none; }
+  nav a:hover { color: #fff; }
+  h1 { font-size: 22px; margin: 32px 0 16px; color: #fff; }
+  h2 {
+    font-size: 18px;
+    margin: 40px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent-light);
+  }
+  h3 { font-size: 15px; margin: 24px 0 10px; color: var(--blue); }
+  p { margin: 10px 0; color: var(--text-dim); }
+  strong { color: #fff; }
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    color: var(--accent-light);
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 14px 0;
+  }
+  pre code { background: none; padding: 0; color: var(--text); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--surface);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 16px;
+    margin: 14px 0;
+    background: rgba(124,58,237,0.05);
+    border-radius: 0 6px 6px 0;
+  }
+  ul, ol { padding-left: 22px; margin: 10px 0; color: var(--text-dim); }
+  li { margin: 6px 0; }
+  a { color: var(--accent-light); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .scene {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .scene h3 { margin-top: 0; color: var(--green); }
+  .flow {
+    background: rgba(124,58,237,0.05);
+    border: 1px solid rgba(124,58,237,0.15);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre;
+  }
+  .divider {
+    text-align: center;
+    color: var(--accent);
+    font-size: 20px;
+    margin: 32px 0;
+    letter-spacing: 8px;
+  }
+  @media (max-width: 480px) {
+    body { padding: 16px 14px 40px; }
+    pre, .flow { font-size: 12px; padding: 12px 14px; }
+    h1 { font-size: 20px; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AGENTX</div>
+  <div class="subtitle">双 Agent 协同使用手册 · 标准版</div>
+</header>
+
+<nav>
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#s1">系统概览</a></li>
+    <li><a href="#s2">Claude Code 快速上手</a></li>
+    <li><a href="#s3">Hermes 快速上手</a></li>
+    <li><a href="#s4">分工法则</a></li>
+    <li><a href="#s5">协同工作流实战</a></li>
+    <li><a href="#s6">技能系统</a></li>
+    <li><a href="#s7">常见问题</a></li>
+  </ol>
+</nav>
+
+<h1>🤖 双 Agent 协同使用手册</h1>
+<p>你现在拥有一个双人 AI 团队：<strong>Claude Code</strong> 负责写代码，<strong>Hermes</strong> 负责搜资料和自动化。这份手册教你如何让它们高效配合。</p>
+
+<h2 id="s1">1. 系统概览</h2>
+
+<p>你的 AI 团队架构：</p>
+
+<div class="flow">你（人类）
+  ├── Claude Code（写代码、改文件、Git 操作）
+  └── Hermes（查资料、定时任务、多平台消息）</div>
+
+<table>
+  <tr><th></th><th>Claude Code</th><th>Hermes</th></tr>
+  <tr><td><strong>定位</strong></td><td>你的 AI 程序员</td><td>你的 AI 助理</td></tr>
+  <tr><td><strong>擅长</strong></td><td>写代码、重构、Debug、Git</td><td>搜索、定时任务、跨平台</td></tr>
+  <tr><td><strong>运行方式</strong></td><td>终端 CLI，按需启动</td><td>常驻后台，随时可用</td></tr>
+  <tr><td><strong>启动命令</strong></td><td><code>claude</code></td><td><code>hermes</code></td></tr>
+</table>
+
+<h2 id="s2">2. Claude Code 快速上手</h2>
+
+<h3>启动</h3>
+<pre><code>cd /path/to/your/project
+claude</code></pre>
+
+<h3>基本用法</h3>
+<p>直接描述你想做的事，Claude Code 会自己读代码、写代码、执行命令：</p>
+<pre><code>&gt; 帮我修复这个登录页面的 bug
+&gt; 给这个函数加单元测试
+&gt; 重构一下这个模块，拆成两个文件</code></pre>
+
+<h3>常用操作</h3>
+<table>
+  <tr><th>操作</th><th>做法</th></tr>
+  <tr><td>写新功能</td><td>直接描述需求，Claude Code 会自己规划并实现</td></tr>
+  <tr><td>修 Bug</td><td>描述 bug 现象或粘贴报错信息</td></tr>
+  <tr><td>代码审查</td><td>「帮我 review 一下这次的改动」</td></tr>
+  <tr><td>提交代码</td><td>「帮我 commit 这些改动」</td></tr>
+  <tr><td>询问代码</td><td>「这个函数是干嘛的？」</td></tr>
+</table>
+
+<p><strong>关键概念：</strong></p>
+<ul>
+  <li><strong>CLAUDE.md</strong> — 项目规则文件，Claude Code 启动时自动读取。已包含双 Agent 分工规则</li>
+  <li><strong>Memory</strong> — Claude Code 会记住你的偏好和项目信息</li>
+  <li><strong>权限确认</strong> — 执行修改前会征求你的同意</li>
+</ul>
+
+<h2 id="s3">3. Hermes 快速上手</h2>
+<p>基础操作请参考《AgentX 快速使用指南》，这里补充高级功能：</p>
+
+<table>
+  <tr><th>功能</th><th>用法</th></tr>
+  <tr><td>网页搜索</td><td>「帮我搜一下 React 19 的新特性」</td></tr>
+  <tr><td>定时任务</td><td><code>hermes cronjob create</code></td></tr>
+  <tr><td>多平台消息</td><td>通过 Gateway 配置</td></tr>
+</table>
+
+<div class="divider">···</div>
+
+<h2 id="s4">4. 分工法则</h2>
+
+<h3>核心原则：谁擅长，谁来做</h3>
+
+<div class="flow">有个任务 → 需要改代码吗？
+  ├── 是 → 找 <strong>Claude Code</strong>
+  └── 否 → 需要搜索/定时/跨平台吗？
+            ├── 是 → 找 <strong>Hermes</strong>
+            └── 否 → 随便哪个都行</div>
+
+<table>
+  <tr><th>找 Claude Code</th><th>找 Hermes</th></tr>
+  <tr><td>写代码、改代码</td><td>搜索技术资料、最新动态</td></tr>
+  <tr><td>调试、修 bug</td><td>定时任务（每日报告、监测）</td></tr>
+  <tr><td>代码审查、重构</td><td>查阅文档、论文</td></tr>
+  <tr><td>Git 操作</td><td>需要联网的信息获取</td></tr>
+  <tr><td>项目文件管理</td><td>非代码类的文本处理</td></tr>
+  <tr><td>运行测试</td><td></td></tr>
+</table>
+
+<h2 id="s5">5. 协同工作流实战</h2>
+
+<div class="scene">
+<h3>场景一：开发新功能</h3>
+<p><strong>第 1 步：Hermes 做调研（10min）</strong></p>
+<pre><code>&gt; 帮我搜一下 Next.js App Router 的最佳实践，总结 5 条要点
+&gt; 查一下 XXX 库的最新 API 文档</code></pre>
+<p><strong>第 2 步：Claude Code 写代码（30min）</strong></p>
+<pre><code>&gt; 根据 Hermes 搜到的最佳实践，帮我实现一个新路由 /dashboard
+&gt; 参考这个 API 文档，对接 XXX 接口</code></pre>
+<p><strong>第 3 步：Claude Code 写测试 + 提交</strong></p>
+<pre><code>&gt; 给刚才的代码加测试
+&gt; commit 一下，message 写 "feat: add dashboard route"</code></pre>
+</div>
+
+<div class="scene">
+<h3>场景二：修 Bug</h3>
+<p><strong>第 1 步：Claude Code 定位问题</strong></p>
+<pre><code>&gt; 用户反馈登录后白屏，帮我排查一下</code></pre>
+<p>Claude Code 会自己读报错日志、追踪代码、定位根因。</p>
+<p><strong>第 2 步：（可选）Hermes 搜索类似问题</strong></p>
+<pre><code>&gt; 搜一下 "Next.js middleware redirect infinite loop" 社区怎么解决</code></pre>
+<p><strong>第 3 步：Claude Code 修复 + 验证</strong></p>
+<pre><code>&gt; 按这个方案修一下，然后跑一下登录流程的测试</code></pre>
+</div>
+
+<div class="scene">
+<h3>场景三：每日工作流</h3>
+<p><strong>早上：</strong></p>
+<pre><code>Hermes:      帮我总结昨晚 GitHub 上关注项目的更新
+Claude Code: （继续昨天的开发任务）</code></pre>
+<p><strong>开发中：</strong></p>
+<ul>
+  <li>Claude Code 写代码</li>
+  <li>遇到不确定的技术选型 → Hermes 搜索对比</li>
+</ul>
+<p><strong>下班前：</strong></p>
+<pre><code>Claude Code: 帮我总结今天改了什么，生成 commit message
+Hermes:      把这些改动摘要发到团队 Telegram</code></pre>
+</div>
+
+<h2 id="s6">6. 技能系统</h2>
+
+<p>已为你激活 20+ 核心技能：</p>
+
+<table>
+  <tr><th>技能分类</th><th>包含技能</th></tr>
+  <tr><td><strong>research</strong></td><td>学术搜索、博客监测、技术动态</td></tr>
+  <tr><td><strong>github</strong></td><td>仓库分析、代码审查辅助、Issue 管理</td></tr>
+  <tr><td><strong>productivity</strong></td><td>日程管理、笔记整理、邮件草拟</td></tr>
+  <tr><td><strong>software-development</strong></td><td>调试辅助、技能开发、技术文档</td></tr>
+</table>
+
+<h3>查看与安装</h3>
+<pre><code>hermes skills list           # 查看已安装技能
+hermes skills install 分类名  # 安装更多技能</code></pre>
+
+<h2 id="s7">7. 常见问题</h2>
+
+<h3>Q: 两个 Agent 会冲突吗？</h3>
+<p>不会。它们运行在不同进程中，读写不同的配置文件。</p>
+
+<h3>Q: 可以同时开两个吗？</h3>
+<p>可以。两个终端窗口，左边 Claude Code 右边 Hermes，各干各的。</p>
+
+<h3>Q: API 费用怎么算？</h3>
+<p>两个 Agent 共用同一个 DeepSeek API Key。建议在 DeepSeek 后台设置月度预算上限。</p>
+
+<h3>Q: 国内 GitHub 访问慢？</h3>
+<p>已配置镜像加速。如果还有问题，联系我。</p>
+
+<hr>
+
+<h2>附录：日常命令速查</h2>
+<pre><code># Claude Code
+claude                       # 启动
+claude "修一下这个bug"        # 带任务启动
+claude --resume              # 恢复上次会话
+Ctrl+C                       # 中断当前操作
+
+# Hermes
+hermes                       # 启动
+hermes update                # 更新
+hermes skills list           # 查看技能
+hermes cronjob list          # 查看定时任务
+Ctrl+C                       # 退出</code></pre>
+
+<footer>
+  AgentX · 双引擎 AI 团队，为你工作
+</footer>
+
+</body>
+</html>
