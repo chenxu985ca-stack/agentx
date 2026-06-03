@@ -7,185 +7,494 @@
 <link rel="icon" type="image/svg+xml" href="brand/avatar.svg">
 <link rel="alternate icon" type="image/png" href="brand/favicon.png">
 <style>
+  /* ═══════════════════════════════════════════
+     AgentX v2 — Landing Page
+     ═══════════════════════════════════════════ */
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0a0a0f;
-    --bg-card: #13131a;
-    --border: #1e1e2e;
-    --text: #e4e4ec;
-    --text-dim: #8888a0;
-    --accent: #a78bfa;
-    --accent2: #7c3aed;
+    --bg: #06060b;
+    --bg2: #0c0c16;
+    --surface: #111122;
+    --surface2: #16162a;
+    --border: #1e1e38;
+    --border-hover: #2d2d50;
+    --text: #e8e8f4;
+    --text-dim: #8a8aa8;
+    --text-muted: #5e5e7a;
+    --purple: #8b5cf6;
+    --purple-deep: #6d28d9;
+    --purple-glow: rgba(139,92,246,0.25);
+    --blue: #3b82f6;
+    --blue-glow: rgba(59,130,246,0.2);
     --green: #34d399;
-    --blue: #60a5fa;
-    --gold: #fbbf24;
-    --gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #60a5fa 100%);
+    --gold: #f59e0b;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
+    line-height: 1.7;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Nav ─────────────────────────────── */
+  /* ═══ Background Pattern ═══ */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(139,92,246,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 60%, rgba(59,130,246,0.04) 0%, transparent 70%);
+    opacity: 0.8;
+  }
+
+  /* ═══ Grid Overlay ═══ */
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.025;
+    background-image:
+      linear-gradient(rgba(139,92,246,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139,92,246,0.5) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, black 30%, transparent 70%);
+  }
+
+  /* ═══ Content Wrapper ═══ */
+  main { position: relative; z-index: 1; }
+
+  /* ═══ Nav ═══ */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px; height: 60px;
+    background: rgba(6,6,11,0.8); backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid transparent;
+    padding: 0 28px; height: 64px;
     display: flex; align-items: center; justify-content: space-between;
+    transition: border-color var(--transition);
   }
-  .nav-logo { font-weight: 700; font-size: 18px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; }
-  .nav-logo svg { -webkit-text-fill-color: initial; flex-shrink: 0; }
-  .nav-cta { padding: 8px 20px; border-radius: 8px; background: var(--accent2); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; transition: opacity .2s; }
-  .nav-cta:hover { opacity: .85; }
+  nav.scrolled { border-bottom-color: var(--border); }
 
-  /* ── Hero ────────────────────────────── */
-  .hero {
-    padding: 160px 24px 100px; text-align: center; max-width: 720px; margin: 0 auto;
-    position: relative;
+  .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-text {
+    font-family: "SF Mono", "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    font-size: 20px; font-weight: 800; letter-spacing: 4px;
+    background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 40%, #60a5fa 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
+  .nav-cta {
+    padding: 10px 22px; border-radius: 10px;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff; text-decoration: none; font-size: 14px; font-weight: 600;
+    transition: all var(--transition); box-shadow: 0 2px 12px rgba(124,58,237,0.25);
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
+
+  /* ═══ Section Base ═══ */
+  section { padding: 100px 24px; position: relative; }
+  .section-label {
+    text-align: center; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--purple); margin-bottom: 16px;
+  }
+  .section-title {
+    text-align: center; font-size: clamp(28px, 4vw, 40px); font-weight: 800;
+    margin-bottom: 16px; letter-spacing: -0.5px;
+  }
+  .section-sub {
+    text-align: center; color: var(--text-dim); font-size: 16px;
+    max-width: 520px; margin: 0 auto 60px;
+  }
+
+  /* ═══ Hero ═══ */
+  .hero {
+    padding: 180px 24px 120px; text-align: center;
+    max-width: 780px; margin: 0 auto; position: relative;
+  }
+  /* Glow orbs */
   .hero::before {
-    content: ''; position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
-    width: 500px; height: 500px; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+    content: '';
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 640px; height: 640px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.12) 0%, rgba(59,130,246,0.06) 35%, transparent 70%);
     pointer-events: none;
   }
-  .hero-badge {
-    display: inline-block; padding: 6px 16px; border-radius: 20px;
-    background: rgba(124,58,237,0.15); color: var(--accent); font-size: 13px;
-    font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(124,58,237,0.3);
-    position: relative;
+  /* Animated X mark */
+  .hero-x {
+    display: inline-block; width: 72px; height: 72px; margin-bottom: 28px;
+    position: relative; animation: heroFloat 4s ease-in-out infinite;
   }
-  .hero h1 { font-size: clamp(36px, 6vw, 56px); font-weight: 800; line-height: 1.15; margin-bottom: 20px; position: relative; }
-  .hero h1 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero p { color: var(--text-dim); font-size: 18px; max-width: 520px; margin: 0 auto 36px; position: relative; }
-  .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
-  .btn-primary { padding: 14px 32px; border-radius: 12px; background: var(--accent2); color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; transition: all .2s; }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.35); }
-  .btn-secondary { padding: 14px 32px; border-radius: 12px; border: 1px solid var(--border); color: var(--text); text-decoration: none; font-weight: 600; font-size: 16px; transition: all .2s; }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 18px; border-radius: 20px;
+    background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25);
+    color: var(--purple); font-size: 13px; font-weight: 600;
+    margin-bottom: 28px; position: relative;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #34d399;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* ── Sections ────────────────────────── */
-  section { padding: 80px 24px; }
-  .section-header { text-align: center; max-width: 600px; margin: 0 auto 60px; }
-  .section-header h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
-  .section-header p { color: var(--text-dim); font-size: 16px; }
+  .hero h1 {
+    font-size: clamp(38px, 7vw, 64px); font-weight: 800;
+    line-height: 1.1; margin-bottom: 24px; position: relative;
+    letter-spacing: -1px;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 30%, #60a5fa 70%, #818cf8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero h1 .highlight2 {
+    background: linear-gradient(135deg, #60a5fa, #818cf8, #a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p {
+    color: var(--text-dim); font-size: 18px; max-width: 540px;
+    margin: 0 auto 40px; position: relative; line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 44px; position: relative;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-stat .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-  /* ── Pricing ─────────────────────────── */
+  .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn-primary {
+    padding: 15px 36px; border-radius: 12px;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff; text-decoration: none; font-weight: 700; font-size: 16px;
+    transition: all var(--transition);
+    box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(124,58,237,0.45);
+  }
+  .btn-outline {
+    padding: 15px 36px; border-radius: 12px;
+    border: 1.5px solid var(--border);
+    color: var(--text); text-decoration: none; font-weight: 600; font-size: 16px;
+    transition: all var(--transition);
+  }
+  .btn-outline:hover { border-color: var(--purple); color: var(--purple); background: rgba(139,92,246,0.04); }
+
+  /* ═══ Divider ═══ */
+  .section-divider {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    max-width: 200px; margin: 0 auto 60px;
+  }
+  .section-divider span { color: var(--text-muted); font-size: 12px; font-weight: 600; letter-spacing: 2px; white-space: nowrap; }
+  .section-divider::before, .section-divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* ═══ Pricing ═══ */
   .pricing-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px; max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; max-width: 1060px; margin: 0 auto;
+    align-items: start;
   }
   .pricing-card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 36px 28px; position: relative; transition: all .3s;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px 30px;
+    position: relative; transition: all var(--transition);
   }
-  .pricing-card:hover { border-color: var(--accent); transform: translateY(-4px); }
-  .pricing-card.featured { border-color: var(--accent2); box-shadow: 0 0 40px rgba(124,58,237,0.1); }
-  .pricing-card.featured::before {
-    content: '🔥 早鸟推荐'; position: absolute; top: -12px; right: 24px;
-    background: var(--gradient); color: #fff; padding: 4px 14px; border-radius: 12px;
-    font-size: 12px; font-weight: 700;
+  .pricing-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
   }
-  .pricing-card h3 { font-size: 20px; margin-bottom: 8px; }
-  .pricing-card .price { font-size: 36px; font-weight: 800; margin: 16px 0 4px; }
-  .pricing-card .price sub { font-size: 14px; color: var(--text-dim); font-weight: 400; }
-  /* Early bird */
-  .early-bird-banner { max-width: 600px; margin: 0 auto 32px; text-align: center; padding: 12px 20px; border-radius: 10px; background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25); color: var(--accent); font-size: 15px; font-weight: 600; }
-  .price-original { font-size: 18px; color: var(--text-dim); text-decoration: line-through; margin-right: 10px; font-weight: 400; display: inline-block; vertical-align: middle; }
-  .price-early { font-size: 36px; font-weight: 800; color: var(--accent); display: inline-block; vertical-align: middle; }
-  .early-bird-tag { display: inline-block; background: var(--accent2); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 6px; vertical-align: middle; }
-  .pricing-card .desc { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; }
-  .pricing-card ul { list-style: none; margin-bottom: 28px; }
-  .pricing-card ul li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; display: flex; align-items: center; gap: 8px; }
-  .pricing-card ul li::before { content: '✓'; color: var(--green); font-weight: 700; }
-  .card-btn { display: block; text-align: center; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all .2s; }
-  .card-btn.primary { background: var(--accent2); color: #fff; }
-  .card-btn.primary:hover { opacity: .85; }
-  .card-btn.outline { border: 1px solid var(--border); color: var(--text); }
-  .card-btn.outline:hover { border-color: var(--accent); color: var(--accent); }
+  .pricing-card.featured {
+    border-color: rgba(139,92,246,0.4);
+    background: linear-gradient(180deg, rgba(139,92,246,0.06) 0%, var(--surface) 30%);
+    box-shadow: 0 0 60px rgba(124,58,237,0.08);
+    transform: scale(1.03);
+  }
+  .pricing-card.featured:hover { transform: scale(1.03) translateY(-4px); }
 
-  /* ── Process ──────────────────────────── */
-  .process-steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 560px; margin: 0 auto; }
-  .step { text-align: center; }
-  .step-num { width: 56px; height: 56px; border-radius: 16px; background: var(--gradient); color: #fff; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-  .step h4 { font-size: 16px; margin-bottom: 6px; }
-  .step p { color: var(--text-dim); font-size: 14px; }
+  .card-badge {
+    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    color: #fff; padding: 5px 18px; border-radius: 14px;
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    box-shadow: 0 4px 16px rgba(124,58,237,0.35);
+    white-space: nowrap;
+  }
+  .pricing-card .tier {
+    font-size: 14px; font-weight: 700; color: var(--purple);
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .pricing-card .tier.basic { color: var(--green); }
+  .pricing-card .tier.pro { color: var(--blue); }
+  .pricing-card .tier.enterprise { color: var(--purple); }
 
-  /* ── Why Us ──────────────────────────── */
-  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
-  .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
-  .feature-card .icon { font-size: 28px; margin-bottom: 12px; }
-  .feature-card h4 { font-size: 16px; margin-bottom: 6px; }
-  .feature-card p { color: var(--text-dim); font-size: 14px; line-height: 1.5; }
+  .pricing-card .name { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .pricing-card .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
 
-  /* ── FAQ ─────────────────────────────── */
-  .faq-list { max-width: 650px; margin: 0 auto; }
-  .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
-  .faq-q { font-weight: 700; font-size: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-  .faq-a { color: var(--text-dim); font-size: 14px; margin-top: 10px; display: none; }
-  .faq-item.open .faq-a { display: block; }
+  .pricing-card .price-line { margin-bottom: 28px; }
+  .price-original { font-size: 16px; color: var(--text-muted); text-decoration: line-through; margin-right: 10px; }
+  .price-now { font-size: 40px; font-weight: 800; color: #fff; }
+  .price-now sub { font-size: 13px; color: var(--text-dim); font-weight: 400; }
+  .early-tag {
+    display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #000; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px;
+    margin-left: 8px; vertical-align: super; letter-spacing: 0.5px;
+  }
 
-  /* ── CTA ─────────────────────────────── */
-  .cta-section { text-align: center; padding: 100px 24px; }
-  .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
-  .cta-section p { color: var(--text-dim); font-size: 16px; margin-bottom: 32px; }
-  .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .pricing-card ul { list-style: none; margin-bottom: 32px; }
+  .pricing-card ul li {
+    padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px; display: flex; align-items: flex-start; gap: 10px;
+    color: var(--text-dim);
+  }
+  .pricing-card ul li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
 
-  /* ── Footer ──────────────────────────── */
-  footer { text-align: center; padding: 40px 24px; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+  .card-btn {
+    display: block; text-align: center; padding: 13px; border-radius: var(--radius-sm);
+    font-weight: 700; font-size: 15px; text-decoration: none; transition: all var(--transition);
+  }
+  .card-btn.primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; }
+  .card-btn.primary:hover { opacity: 0.9; }
+  .card-btn.outline { border: 1.5px solid var(--border); color: var(--text); }
+  .card-btn.outline:hover { border-color: var(--purple); color: var(--purple); }
+  .card-btn.outline-purple { border: 1.5px solid rgba(139,92,246,0.3); color: var(--purple); }
+  .card-btn.outline-purple:hover { background: rgba(139,92,246,0.08); }
 
-  /* ── Responsive ──────────────────────── */
+  .early-bird-banner {
+    max-width: 360px; margin: 0 auto 40px; text-align: center;
+    padding: 10px 20px; border-radius: 10px;
+    background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2);
+    color: var(--gold); font-size: 14px; font-weight: 600;
+  }
+
+  /* ═══ Process ═══ */
+  .process-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 20px; max-width: 900px; margin: 0 auto;
+  }
+  .process-card {
+    text-align: center; padding: 32px 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); position: relative;
+    transition: all var(--transition);
+  }
+  .process-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+  .process-num {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff; font-size: 20px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .process-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .process-card p { color: var(--text-dim); font-size: 13px; line-height: 1.5; }
+  /* Connector line between steps (desktop only) */
+  @media (min-width: 769px) {
+    .process-card:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 56px; right: -12px;
+      width: 24px; height: 1px;
+      background: var(--border);
+    }
+  }
+
+  /* ═══ Features ═══ */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; max-width: 960px; margin: 0 auto;
+  }
+  .feature-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 30px 26px;
+    transition: all var(--transition);
+  }
+  .feature-card:hover {
+    border-color: var(--border-hover);
+    background: var(--surface2);
+  }
+  .feature-icon { font-size: 32px; margin-bottom: 14px; display: block; }
+  .feature-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .feature-card p { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
+
+  /* ═══ FAQ ═══ */
+  .faq-list { max-width: 660px; margin: 0 auto; }
+  .faq-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); margin-bottom: 12px;
+    overflow: hidden; transition: all var(--transition);
+  }
+  .faq-item:hover { border-color: var(--border-hover); }
+  .faq-q {
+    padding: 18px 22px; font-weight: 700; font-size: 15px;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    user-select: none; transition: color var(--transition);
+  }
+  .faq-q:hover { color: var(--purple); }
+  .faq-q .arrow {
+    font-size: 12px; transition: transform var(--transition); color: var(--text-muted);
+  }
+  .faq-item.open .faq-q .arrow { transform: rotate(180deg); color: var(--purple); }
+  .faq-a {
+    color: var(--text-dim); font-size: 14px; line-height: 1.7;
+    padding: 0 22px; max-height: 0; overflow: hidden;
+    transition: all var(--transition);
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding: 0 22px 18px; }
+
+  /* ═══ CTA ═══ */
+  .cta-section {
+    text-align: center; padding: 120px 24px; position: relative;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; margin-bottom: 16px; position: relative; }
+  .cta-section > p { color: var(--text-dim); font-size: 16px; margin-bottom: 36px; position: relative; }
+  .contact-cards {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    max-width: 660px; margin: 0 auto; position: relative;
+  }
+  .contact-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 20px 24px;
+    text-decoration: none; color: var(--text); transition: all var(--transition);
+    display: flex; align-items: center; gap: 12px; min-width: 180px;
+  }
+  .contact-card:hover { border-color: var(--purple); transform: translateY(-2px); }
+  .contact-card .icon { font-size: 22px; }
+  .contact-card .label { font-size: 12px; color: var(--text-muted); }
+  .contact-card .value { font-size: 15px; font-weight: 600; }
+
+  /* ═══ Footer ═══ */
+  footer {
+    text-align: center; padding: 40px 24px;
+    color: var(--text-muted); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  footer .brand {
+    font-family: "SF Mono", "JetBrains Mono", monospace;
+    font-size: 16px; font-weight: 800; letter-spacing: 6px;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  /* ═══ Responsive ═══ */
+  @media (max-width: 900px) {
+    .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+    .pricing-card.featured { transform: none; }
+    .pricing-card.featured:hover { transform: translateY(-4px); }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-row { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 640px) {
-    .hero { padding: 120px 20px 60px; }
+    .hero { padding: 140px 20px 80px; }
     .hero h1 { font-size: 30px; }
-    section { padding: 50px 16px; }
-    .pricing-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    section { padding: 64px 16px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .process-row { grid-template-columns: 1fr; }
+    .contact-cards { flex-direction: column; align-items: center; }
+    nav { padding: 0 16px; }
+    .nav-logo-text { font-size: 17px; letter-spacing: 2px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Nav -->
-<nav>
-  <div class="nav-logo">
-    <svg width="28" height="28" viewBox="0 0 44 44" style="display:inline-block;vertical-align:middle;margin-right:8px;margin-top:-2px;">
+<div class="grid-bg"></div>
+<main>
+
+<!-- ═══ Nav ═══ -->
+<nav id="navbar">
+  <a href="#" class="nav-brand">
+    <svg width="32" height="32" viewBox="0 0 44 44">
       <polygon points="6,4 10,4 37,38 34,38" fill="#8b5cf6"/>
       <polygon points="38,4 34,4 7,38 10,38" fill="#3b82f6"/>
-    </svg>AgentX
-  </div>
+    </svg>
+    <span class="nav-logo-text">AGENTX</span>
+  </a>
   <a href="#cta" class="nav-cta">预约咨询</a>
 </nav>
 
-<!-- Hero -->
+<!-- ═══ Hero ═══ -->
 <section class="hero">
-  <div class="hero-badge">⚡ Claude Code × Hermes 双引擎协同</div>
-  <h1>为你的业务，<span>部署 AI 团队</span></h1>
-  <p>不用啃文档、不用踩坑。我帮你把最强开源 AI Agent 装好配好，让你直接拥有一个 24 小时待命的数字员工。</p>
+  <!-- Floating X -->
+  <div class="hero-x">
+    <svg width="72" height="72" viewBox="0 0 44 44">
+      <polygon points="5,3 10,3 38,38 34,38" fill="url(#hx1)" opacity="0.9"/>
+      <polygon points="39,3 34,3 6,38 10,38" fill="url(#hx2)" opacity="0.9"/>
+      <defs>
+        <linearGradient id="hx1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#7c3aed"/>
+          <stop offset="100%" style="stop-color:#3b82f6"/>
+        </linearGradient>
+        <linearGradient id="hx2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#3b82f6"/>
+          <stop offset="100%" style="stop-color:#8b5cf6"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="hero-badge"><span class="dot"></span> Claude Code × Hermes 双引擎协同</div>
+
+  <h1>
+    为你的业务<br>
+    <span class="highlight">部署专属 AI 团队</span>
+  </h1>
+
+  <p>不用啃英文文档、不用踩配置坑。我帮你把最强 AI Agent 装好配好，<br>让你直接拥有 24 小时待命的数字员工。</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">24h</div><div class="lbl">交付周期</div></div>
+    <div class="hero-stat"><div class="num">2</div><div class="lbl">双引擎协同</div></div>
+    <div class="hero-stat"><div class="num">99%</div><div class="lbl">客户满意度</div></div>
+  </div>
+
   <div class="hero-buttons">
-    <a href="#pricing" class="btn-primary">查看服务 →</a>
-    <a href="#process" class="btn-secondary">怎么做到的？</a>
+    <a href="#pricing" class="btn-primary">查看服务方案 →</a>
+    <a href="#process" class="btn-outline">了解流程</a>
   </div>
 </section>
 
-<!-- Pricing -->
+<!-- ═══ Pricing ═══ -->
 <section id="pricing">
-  <div class="section-header">
-    <h2>服务与定价</h2>
-    <p>从零到 AI Ready，全程远程交付，你只需准备好电脑</p>
-  </div>
-  <div class="early-bird-banner">🔥 前 10 单享 6 折早鸟价，满额即恢复原价</div>
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">选择适合你的方案</h2>
+  <p class="section-sub">从零到 AI Ready，全程远程交付，你只需准备好电脑</p>
+  <div class="early-bird-banner">🔥 前 10 单早鸟特惠，满额恢复原价</div>
+
   <div class="pricing-grid">
     <!-- Basic -->
     <div class="pricing-card">
-      <h3>🟢 基础配置</h3>
-      <div class="price"><span class="price-original">¥599</span><span class="price-early">¥299</span><span class="early-bird-tag">早鸟</span><sub>/次</sub></div>
-      <p class="desc">让 Hermes Agent 跑起来</p>
+      <div class="tier basic">Basic</div>
+      <div class="name">基础配置</div>
+      <div class="subtitle">让 Hermes Agent 跑起来</div>
+      <div class="price-line">
+        <span class="price-original">¥599</span>
+        <span class="price-now">¥299<span class="early-tag">早鸟</span><sub>/次</sub></span>
+      </div>
       <ul>
         <li>Hermes Agent 安装部署</li>
         <li>DeepSeek / Claude 模型接入</li>
@@ -193,13 +502,19 @@
         <li>CLI 使用教学（30min）</li>
         <li>7 天售后支持</li>
       </ul>
-      <a href="#cta" class="card-btn outline">预约 →</a>
+      <a href="#cta" class="card-btn outline">预约咨询 →</a>
     </div>
+
     <!-- Standard -->
     <div class="pricing-card featured">
-      <h3>🔵 双 Agent 协同</h3>
-      <div class="price"><span class="price-original">¥1,999</span><span class="price-early">¥799</span><span class="early-bird-tag">早鸟</span><sub>/次</sub></div>
-      <p class="desc">Claude Code + Hermes 双引擎</p>
+      <div class="card-badge">🔥 最受欢迎</div>
+      <div class="tier pro" style="margin-top:8px;">Professional</div>
+      <div class="name">双 Agent 协同</div>
+      <div class="subtitle">Claude Code + Hermes 双引擎</div>
+      <div class="price-line">
+        <span class="price-original">¥1,999</span>
+        <span class="price-now">¥799<span class="early-tag">早鸟</span><sub>/次</sub></span>
+      </div>
       <ul>
         <li>✅ 基础配置全部内容</li>
         <li>Claude Code 安装与配置</li>
@@ -211,14 +526,19 @@
       </ul>
       <a href="#cta" class="card-btn primary">立即预约 →</a>
     </div>
-    <!-- Premium -->
+
+    <!-- Enterprise -->
     <div class="pricing-card">
-      <h3>🟣 企业全栈部署</h3>
-      <div class="price"><span class="price-original">¥3,999</span><span class="price-early">¥1,999</span><span class="early-bird-tag">早鸟</span><sub>/次</sub></div>
-      <p class="desc">多平台接入 + 自动化工作流</p>
+      <div class="tier enterprise">Enterprise</div>
+      <div class="name">企业全栈部署</div>
+      <div class="subtitle">多平台接入 + 自动化工作流</div>
+      <div class="price-line">
+        <span class="price-original">¥3,999</span>
+        <span class="price-now">¥1,999<span class="early-tag">早鸟</span><sub>/次</sub></span>
+      </div>
       <ul>
         <li>✅ 双 Agent 协同全部内容</li>
-        <li>Gateway 网关配置（微信/飞书/钉钉/Telegram）</li>
+        <li>Gateway 多平台接入（微信/飞书/钉钉/Telegram）</li>
         <li>Cron 定时任务定制（5条）</li>
         <li>业务专属技能开发（3个）</li>
         <li>MCP 工具集成</li>
@@ -226,125 +546,157 @@
         <li>1 周贴身陪跑</li>
         <li>30 天售后支持</li>
       </ul>
-      <a href="#cta" class="card-btn outline">预约 →</a>
+      <a href="#cta" class="card-btn outline-purple">预约咨询 →</a>
     </div>
   </div>
 </section>
 
-<!-- Process -->
+<!-- ═══ Process ═══ -->
 <section id="process">
-  <div class="section-header">
-    <h2>四步到位</h2>
-    <p>不用懂技术，你只需要告诉我你的需求</p>
-  </div>
-  <div class="process-steps">
-    <div class="step">
-      <div class="step-num">1</div>
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">四步到位</h2>
+  <p class="section-sub">不用懂技术，你只需要告诉我你的需求</p>
+
+  <div class="process-row">
+    <div class="process-card">
+      <div class="process-num">1</div>
       <h4>需求沟通</h4>
-      <p>你用自然语言描述日常工作中想自动化的事情</p>
+      <p>你用自然语言描述日常工作里想自动化的事情</p>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
+    <div class="process-card">
+      <div class="process-num">2</div>
       <h4>远程部署</h4>
       <p>我远程帮你安装配置，或提供详细操作指南</p>
     </div>
-    <div class="step">
-      <div class="step-num">3</div>
+    <div class="process-card">
+      <div class="process-num">3</div>
       <h4>带教上手</h4>
       <p>视频/语音教学，确保你会日常使用和基本维护</p>
     </div>
-    <div class="step">
-      <div class="step-num">4</div>
+    <div class="process-card">
+      <div class="process-num">4</div>
       <h4>持续优化</h4>
-      <p>Hermes 会根据你的使用习惯自动进化，越用越顺手</p>
+      <p>Agent 会根据你的使用习惯自动进化，越用越顺手</p>
     </div>
   </div>
 </section>
 
-<!-- Why Us -->
+<!-- ═══ Features ═══ -->
 <section>
-  <div class="section-header">
-    <h2>为什么选我？</h2>
-    <p>市面上能做 AI Agent 部署的人不少，但能打通 Claude Code + Hermes 双引擎协同的，不多</p>
-  </div>
+  <div class="section-label">Why AgentX</div>
+  <h2 class="section-title">为什么选我？</h2>
+  <p class="section-sub">打通 Claude Code + Hermes 双引擎协同，提供完整部署服务</p>
+
   <div class="features-grid">
     <div class="feature-card">
-      <div class="icon">🎯</div>
+      <span class="feature-icon">🎯</span>
       <h4>双 Agent 协同专家</h4>
-      <p>市面上唯一打通 Claude Code（写代码）+ Hermes（自动化运营）协同工作流的服务商。</p>
+      <p>唯一打通 Claude Code（写代码）+ Hermes（自动化运营）协同工作流的服务商</p>
     </div>
     <div class="feature-card">
-      <div class="icon">🔧</div>
+      <span class="feature-icon">🔧</span>
       <h4>实战踩坑经验</h4>
-      <p>自己趟过安装、配置、模型接入、国内网络适配的所有坑，你不用再踩一遍。</p>
+      <p>自己趟过安装、配置、模型接入、国内网络适配的所有坑，你不用再踩一遍</p>
     </div>
     <div class="feature-card">
-      <div class="icon">📈</div>
+      <span class="feature-icon">📈</span>
       <h4>越用越强</h4>
-      <p>Hermes 的自进化机制意味着你花的钱不会贬值——Agent 每天都在变得更懂你的业务。</p>
+      <p>Hermes 的自进化机制让 Agent 每天都更懂你的业务，部署价值持续增长</p>
     </div>
     <div class="feature-card">
-      <div class="icon">🛡️</div>
+      <span class="feature-icon">🛡️</span>
       <h4>安全第一</h4>
-      <p>本地部署、数据不出你电脑、零遥测。API Key 加密存储，7 层安全防线。</p>
+      <p>本地部署、数据不出电脑、零遥测。API Key 加密存储，7 层安全防线</p>
     </div>
     <div class="feature-card">
-      <div class="icon">💬</div>
+      <span class="feature-icon">💬</span>
       <h4>中文原生支持</h4>
-      <p>全中文配置、中文沟通、中文文档。不用啃英文技术文档。</p>
+      <p>全中文配置、沟通、文档。不用啃英文技术资料</p>
     </div>
     <div class="feature-card">
-      <div class="icon">⚡</div>
+      <span class="feature-icon">⚡</span>
       <h4>极速交付</h4>
-      <p>标准版 2 小时内交付可用。企业版 3 天内完成全栈部署。不拖工期。</p>
+      <p>标准版 2 小时内交付可用，企业版 3 天内完成全栈部署，不拖工期</p>
     </div>
   </div>
 </section>
 
-<!-- FAQ -->
+<!-- ═══ FAQ ═══ -->
 <section>
-  <div class="section-header">
-    <h2>常见问题</h2>
-  </div>
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">常见问题</h2>
+  <p class="section-sub"></p>
+
   <div class="faq-list">
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">我需要准备什么？<span>▾</span></div>
-      <div class="faq-a">一台电脑（Mac/Win/Linux 均可），稳定的网络，以及你想用 AI 解决的工作痛点。其余我来搞定。</div>
+    <div class="faq-item open">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        我需要准备什么？<span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">一台电脑（Mac / Win / Linux 均可），稳定的网络，以及你想用 AI 解决的工作痛点。其余我来搞定。</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">后续使用还需要付费吗？<span>▾</span></div>
-      <div class="faq-a">Agent 本身免费开源。你只需要付 AI 模型的 API 费用（如 DeepSeek 约 ¥1-3/百万 token，日常使用月均几十元）。</div>
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        后续使用还需要付费吗？<span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">Agent 本身免费开源。你只需要付 AI 模型的 API 费用（如 DeepSeek 约 ¥1-3 / 百万 token，日常使用月均几十元）。</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">我的数据安全吗？<span>▾</span></div>
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        我的数据安全吗？<span class="arrow">▾</span>
+      </div>
       <div class="faq-a">全部本地部署，数据不经过第三方服务器。API 调用仅发送当前对话上下文，不存储在你的电脑之外。</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">适合哪些人？<span>▾</span></div>
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        适合哪些人？<span class="arrow">▾</span>
+      </div>
       <div class="faq-a">独立开发者、自媒体创作者、咨询顾问、中小企业技术负责人——任何想用 AI 提效但不想花时间折腾配置的人。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        能开发票吗？<span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">可以。提供增值税普通发票，交付完成后 3 个工作日内开具。</div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ═══ CTA ═══ -->
 <section id="cta" class="cta-section">
   <h2>准备好拥有你的 AI 团队了吗？</h2>
-  <p>直接联系我，24 小时内回复，免费聊聊你的需求。</p>
-  <div class="cta-buttons">
-    <a href="mailto:chenxu985ca@gmail.com" class="btn-primary">📧 chenxu985ca@gmail.com</a>
-    <a href="#" class="btn-secondary" onclick="navigator.clipboard.writeText('Lee251015');this.textContent='✅ 已复制';setTimeout(()=>this.textContent='💬 微信: Lee251015',2000);return false;">💬 微信: Lee251015</a>
-    <a href="tel:+8619115160399" class="btn-secondary">📞 19115160399</a>
-  </div>
-  <div style="margin-top: 24px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; font-size: 14px; color: var(--text-dim);">
-    <span>📧 chenxu985ca@gmail.com</span>
-    <span>💬 微信/手机：Lee251015 / 19115160399</span>
+  <p>直接联系我，24 小时内回复，免费聊聊你的需求</p>
+
+  <div class="contact-cards">
+    <a href="mailto:chenxu985ca@gmail.com" class="contact-card">
+      <span class="icon">📧</span>
+      <div><div class="label">邮箱</div><div class="value">chenxu985ca@gmail.com</div></div>
+    </a>
+    <a href="#" class="contact-card" onclick="navigator.clipboard.writeText('Lee251015');this.querySelector('.value').textContent='✅ 已复制';setTimeout(()=>this.querySelector('.value').textContent='Lee251015',2000);return false;">
+      <span class="icon">💬</span>
+      <div><div class="label">微信</div><div class="value">Lee251015</div></div>
+    </a>
+    <a href="tel:+8619115160399" class="contact-card">
+      <span class="icon">📞</span>
+      <div><div class="label">电话</div><div class="value">19115160399</div></div>
+    </a>
   </div>
 </section>
 
+<!-- ═══ Footer ═══ -->
 <footer>
+  <div class="brand">AGENTX</div>
   <p>© 2026 AgentX · 双引擎 AI 团队部署</p>
-  <p style="font-size:12px;margin-top:4px;">联系：chenxu985ca@gmail.com | 微信 Lee251015 | 电话 19115160399</p>
 </footer>
+
+</main>
+
+<!-- ═══ Nav scroll effect ═══ -->
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+</script>
 
 </body>
 </html>
