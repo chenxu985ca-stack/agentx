@@ -488,6 +488,9 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     margin-bottom: 6px;
   }
+  footer a { color: var(--purple); text-decoration: none; font-size: 14px; font-weight: 600; }
+  footer a:hover { text-decoration: underline; }
+  footer .footer-links { margin-bottom: 10px; }
 
   /* ═══ Responsive ═══ */
   @media (max-width: 900px) {
@@ -786,18 +789,37 @@
 <!-- ═══ Footer ═══ -->
 <footer>
   <div class="brand">AGENTX</div>
-  <p>© 2026 AgentX · 双引擎 AI 团队部署</p>
+  <p class="footer-links">
+    📖 <a href="hermes-guide.html">Hermes 安装指南</a> &nbsp;·&nbsp;
+    📖 <a href="claude-code-guide.html">Claude Code 安装指南</a>
+  </p>
+  <p style="margin-top:8px;">© 2026 AgentX · 双引擎 AI 团队部署</p>
 </footer>
 
 </main>
 
 <script>
-  /* ═══ Theme Toggle ═══ */
+  /* ═══ Theme: Auto (system/time) with manual override ═══ */
   (function() {
     const html = document.documentElement;
     const btn = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('agentx-theme');
-    if (saved) html.setAttribute('data-theme', saved);
+
+    function autoTheme() {
+      const saved = localStorage.getItem('agentx-theme');
+      if (saved) {
+        html.setAttribute('data-theme', saved);
+        return;
+      }
+      const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const hour = new Date().getHours();
+      const isNight = hour < 6 || hour >= 18;
+      html.setAttribute('data-theme', (sysDark || isNight) ? 'dark' : 'light');
+    }
+    autoTheme();
+
+    // Follow system preference changes (only when no manual override)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', autoTheme);
+
     btn.addEventListener('click', () => {
       const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
