@@ -3,18 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude Code 安装与配置指南 · AgentX</title>
+<title>Claude Code 完整指南 · AgentX</title>
 <style>
   :root {
     --bg: #0a0a12; --surface: #12121f; --border: #1e1e35;
     --text: #e4e4ec; --text-dim: #8888a8; --accent: #7c3aed;
-    --accent-light: #a78bfa; --blue: #60a5fa; --code-bg: #0d0d1a;
+    --accent-light: #a78bfa; --blue: #60a5fa; --green: #34d399;
+    --amber: #f59e0b; --red: #ef4444; --code-bg: #0d0d1a;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     background: var(--bg); color: var(--text); line-height: 1.8;
-    max-width: 760px; margin: 0 auto; padding: 24px 20px 60px;
+    max-width: 800px; margin: 0 auto; padding: 24px 20px 60px;
   }
   header { text-align: center; padding: 40px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
   .logo {
@@ -24,6 +25,15 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .subtitle { color: var(--text-dim); font-size: 14px; margin-top: 8px; }
+  nav {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  nav h3 { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  nav ol { padding-left: 18px; font-size: 14px; columns: 2; }
+  nav li { margin: 3px 0; }
+  nav a { color: var(--accent-light); text-decoration: none; }
+  nav a:hover { color: #fff; }
   h1 { font-size: 22px; margin: 32px 0 16px; color: #fff; }
   h2 { font-size: 18px; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); color: var(--accent-light); }
   h3 { font-size: 15px; margin: 24px 0 10px; color: var(--blue); }
@@ -64,12 +74,23 @@
     border-radius: 10px; padding: 20px 24px; margin: 16px 0;
   }
   .card h3 { margin-top: 0; }
+  .divider {
+    text-align: center; color: var(--accent); font-size: 20px;
+    margin: 32px 0; letter-spacing: 8px;
+  }
+  .step {
+    background: var(--surface); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 12px 18px; margin: 12px 0;
+  }
+  .step strong { color: var(--accent-light); }
+  .mode-table td:first-child { font-weight: 600; color: #fff; white-space: nowrap; }
   @media (max-width: 480px) {
     body { padding: 16px 14px 40px; }
     pre { font-size: 12px; padding: 12px 14px; }
     h1 { font-size: 20px; }
     table { font-size: 12px; }
     th, td { padding: 8px 10px; }
+    nav ol { columns: 1; }
   }
 </style>
 </head>
@@ -77,54 +98,141 @@
 
 <header>
   <div class="logo">AGENTX</div>
-  <div class="subtitle">Claude Code 安装与配置指南</div>
+  <div class="subtitle">Claude Code 完整指南 · 从安装到精通</div>
 </header>
 
-<h1>💻 Claude Code 安装与配置</h1>
-<p>适用于 macOS / Linux · 预计 20 分钟完成</p>
+<nav>
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#s1">IDE 选择</a></li>
+    <li><a href="#s2">安装 Claude Code</a></li>
+    <li><a href="#s3">配置大模型</a></li>
+    <li><a href="#s4">权限模式</a></li>
+    <li><a href="#s5">文件输入</a></li>
+    <li><a href="#s6">CLAUDE.md</a></li>
+    <li><a href="#s7">上下文管理</a></li>
+    <li><a href="#s8">子 Agent</a></li>
+    <li><a href="#s9">Hook 钩子</a></li>
+    <li><a href="#s10">Plugin 插件</a></li>
+    <li><a href="#s11">Skills 技能</a></li>
+    <li><a href="#s12">MCP 扩展</a></li>
+    <li><a href="#s13">Git 设置</a></li>
+    <li><a href="#s14">CLI 工具</a></li>
+    <li><a href="#s15">双 Agent 协同</a></li>
+    <li><a href="#s16">验证</a></li>
+    <li><a href="#s17">常见问题</a></li>
+    <li><a href="#s18">检查清单</a></li>
+  </ol>
+</nav>
 
-<h2>1. 前置要求</h2>
+<h1>💻 Claude Code 完整指南</h1>
+<p>适用于 macOS / Windows / Linux · 从安装到精通</p>
+
+<!-- 1. IDE -->
+<h2 id="s1">1. IDE 选择与环境准备</h2>
+<p>部署 Claude Code 前，推荐安装一个 Agent IDE（免费即可）：</p>
 <table>
-  <tr><th>条件</th><th>检查方式</th></tr>
-  <tr><td>macOS 或 Linux</td><td><code>uname -a</code></td></tr>
-  <tr><td>Node.js ≥ 18</td><td><code>node --version</code></td></tr>
-  <tr><td>npm 已安装</td><td><code>npm --version</code></td></tr>
-  <tr><td>有 API Key</td><td>DeepSeek 或 Anthropic</td></tr>
+  <tr><th>IDE</th><th>下载</th><th>特点</th></tr>
+  <tr><td><strong>Cursor</strong></td><td><a href="https://cursor.com">cursor.com</a></td><td>最流行，AI 原生集成</td></tr>
+  <tr><td><strong>Trae</strong></td><td><a href="https://trae.ai">trae.ai</a>（国内）/ <a href="https://trae.ai/en">trae.ai/en</a>（海外）</td><td>字节出品，国内可用</td></tr>
+  <tr><td><strong>Google Anti-gravity</strong></td><td><a href="https://idx.google.com">idx.google.com</a></td><td>Google 出品，云端 IDE</td></tr>
 </table>
-<blockquote>如果没有 Node.js：<code>brew install node</code>（macOS）或 <code>apt install nodejs</code>（Linux）</blockquote>
+<blockquote>以下教程以 macOS 为主，Windows 差异处已标注。</blockquote>
 
-<h2>2. 安装 Claude Code</h2>
-<h3>npm 全局安装</h3>
-<pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+<!-- 2. 安装 -->
+<h2 id="s2">2. 安装 Claude Code</h2>
 
-<h3>验证安装</h3>
+<h3>macOS</h3>
+<div class="step"><strong>步骤 1：</strong>装 Homebrew</div>
+<pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+
+<div class="step"><strong>步骤 2：</strong>把 Homebrew 加到 PATH</div>
+<p>装完后终端会有提示，或者直接让 Claude Code 帮你配：</p>
+<pre><code>帮我把 homebrew 加到 PATH 路径变量里面去</code></pre>
+
+<div class="step"><strong>步骤 3：</strong>安装 Claude Code</div>
+<pre><code>brew install --cask claude-code@latest</code></pre>
+
+<div class="step"><strong>步骤 4：</strong>验证</div>
 <pre><code>claude --version</code></pre>
 
-<h2>3. 配置 API</h2>
+<h3>Windows</h3>
+<div class="step"><strong>步骤 1：</strong>安装 Git（遇到选项输入 <code>y</code>）</div>
+<pre><code>winget install Git.Git</code></pre>
+
+<div class="step"><strong>步骤 2：</strong>安装 Claude Code</div>
+<p>PowerShell（IDE 终端默认）：</p>
+<pre><code>irm https://claude.ai/install.ps1 | iex</code></pre>
+<p>CMD：</p>
+<pre><code>curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd</code></pre>
+
+<div class="step"><strong>步骤 3：</strong>把 Claude Code 加进 PATH</div>
+<pre><code>winget install Anthropic.ClaudeCode</code></pre>
+
+<div class="step"><strong>步骤 4：</strong>重启 IDE 终端后验证</div>
+<pre><code>claude --version</code></pre>
+
+<!-- 3. 配置大模型 -->
+<h2 id="s3">3. 配置大模型</h2>
 
 <div class="card">
-<h3>方案 A：使用 DeepSeek API（推荐）</h3>
-<p>性价比更高，国内访问快：</p>
-<pre><code>export ANTHROPIC_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-export ANTHROPIC_BASE_URL=https://api.deepseek.com/v1</code></pre>
-<p>写入 shell 配置使其永久生效：</p>
-<pre><code># macOS 用 .zshrc，Linux 可能是 .bashrc
+<h3>方案 A：DeepSeek API（推荐，国内友好）</h3>
+<pre><code># 写入环境变量
 cat >> ~/.zshrc << 'EOF'
 export ANTHROPIC_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 export ANTHROPIC_BASE_URL=https://api.deepseek.com/v1
 EOF
 
 source ~/.zshrc</code></pre>
+<p>Windows 用户：在系统环境变量里添加这两条。</p>
 </div>
 
 <div class="card">
-<h3>方案 B：使用 Anthropic API（官方）</h3>
+<h3>方案 B：Anthropic API（官方）</h3>
 <pre><code>export ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
-<p>不需要设置 <code>ANTHROPIC_BASE_URL</code>。</p>
 </div>
 
-<h2>4. 配置 CLAUDE.md</h2>
-<p>CLAUDE.md 是 Claude Code 的项目规则文件，启动时自动读取。</p>
+<div class="card">
+<h3>方案 C：CC Switch 多模型管理</h3>
+<p>支持多种模型自由切换的工具。</p>
+<p><strong>安装：</strong></p>
+<ol>
+  <li>下载：<a href="https://github.com/farion1231/cc-switch/releases/tag/v3.14.1">CC Switch v3.14.1</a></li>
+  <li>根据系统选择安装包</li>
+  <li><strong>务必在启动 Claude Code 之前先设置好 CC Switch</strong></li>
+</ol>
+<p><strong>三种工作模式：</strong></p>
+<table class="mode-table">
+  <tr><td>默认模式</td><td>增强版对话终端，用于意图确认和信息查询</td></tr>
+  <tr><td>计划模式（Plan）</td><td>分析需求、制定步骤，不直接动代码</td></tr>
+  <tr><td>Accept Edits</td><td>执行代码变更的"落地"阶段</td></tr>
+</table>
+</div>
+
+<!-- 4. 权限模式 -->
+<h2 id="s4">4. 权限模式</h2>
+<p>Claude Code 在 Accept Edits 模式下执行命令时会询问：</p>
+<table>
+  <tr><th>选项</th><th>含义</th></tr>
+  <tr><td>仅同意这一次</td><td>只允许当前这次命令执行</td></tr>
+  <tr><td>同意且不再询问</td><td>该项目之后执行同类操作不再问</td></tr>
+  <tr><td>不同意</td><td>拒绝，再商量</td></tr>
+</table>
+<p>如果希望一路绿灯自动执行：</p>
+<pre><code>claude --dangerously-skip-permissions</code></pre>
+<div class="warn">这会跳过所有权限确认，建议只在信任的项目中使用。</div>
+
+<!-- 5. 文件输入 -->
+<h2 id="s5">5. 文件输入方式</h2>
+<h3>@ 指令引用本地文件</h3>
+<pre><code>帮我看看 @/src/utils/helper.ts 这个文件的逻辑
+对比一下 @/src/old.ts 和 @/src/new.ts 的差异</code></pre>
+<h3>拖拽图片</h3>
+<p>直接拖图片到终端，Claude Code 能识别图片内容（UI 还原、截图提问等）。</p>
+
+<!-- 6. CLAUDE.md -->
+<h2 id="s6">6. CLAUDE.md 配置</h2>
+<p>CLAUDE.md 是 Claude Code 的项目规则文件，<strong>启动时自动读取</strong>。</p>
 
 <h3>全局配置（所有项目生效）</h3>
 <pre><code>nano ~/.claude/CLAUDE.md</code></pre>
@@ -143,10 +251,9 @@ source ~/.zshrc</code></pre>
 - 保持与周围代码风格一致
 - 优先使用项目已有的工具库</code></pre>
 
-<h3>项目级配置（单个项目生效）</h3>
+<h3>项目级配置</h3>
 <pre><code>cd /path/to/your/project
 nano CLAUDE.md</code></pre>
-<p>示例（Node.js 项目）：</p>
 <pre><code># CLAUDE.md
 
 ## Project Info
@@ -162,7 +269,114 @@ nano CLAUDE.md</code></pre>
 - API routes in app/api/, follow RESTful
 - Run tests before committing</code></pre>
 
-<h2>5. 双 Agent 协同配置</h2>
+<h3>项目级 vs 全局级</h3>
+<table>
+  <tr><th></th><th>全局 CLAUDE.md</th><th>项目 CLAUDE.md</th></tr>
+  <tr><td>位置</td><td><code>~/.claude/CLAUDE.md</code></td><td>项目根目录</td></tr>
+  <tr><td>作用范围</td><td>所有项目</td><td>仅当前项目</td></tr>
+  <tr><td>优先级</td><td>低</td><td>高（会覆盖全局）</td></tr>
+  <tr><td>适合放什么</td><td>个人信息、通用风格</td><td>项目技术栈、特定规则</td></tr>
+</table>
+
+<!-- 7. 上下文管理 -->
+<h2 id="s7">7. 上下文管理</h2>
+<p>Claude Code 的上下文窗口有限，管理好能大幅提升体验。</p>
+
+<h3>查看上下文用量</h3>
+<pre><code>/context</code></pre>
+
+<h3>主动压缩（高于 60% 时建议）</h3>
+<pre><code>/compact</code></pre>
+
+<h3>彻底清空</h3>
+<pre><code>/clear</code></pre>
+
+<h3>上下文状态栏常驻</h3>
+<pre><code>帮我配一个 statusLine，显示当前目录 + 模型 + 上下文剩余百分比</code></pre>
+<p>根据引导完成后重启终端即可，会在终端底部常驻显示。</p>
+
+<h3>恢复历史会话</h3>
+<pre><code>/resume</code></pre>
+
+<!-- 8. 子Agent -->
+<h2 id="s8">8. 子 Agent（SubAgent）</h2>
+<p>子 Agent 是 Claude Code 可调用的独立执行单元，适合并行处理多任务。</p>
+
+<h3>创建子 Agent</h3>
+<ol>
+  <li>输入 <code>/agents</code>，在 Library 下选择创建项目级子 Agent</li>
+  <li>描述用途（如"专门处理数据库迁移"）</li>
+  <li>选择模型（一般选 Sonnet；用了 CC Switch 则选哪个都一样）</li>
+  <li>为子 Agent 选一个区别于主 Agent 的颜色</li>
+</ol>
+
+<h3>调用与管理</h3>
+<p>输入 <code>/agents</code>，在 Library 下选择已创建的子 Agent。</p>
+
+<blockquote>适合：并行代码审查、多文件重构、独立模块开发。</blockquote>
+
+<!-- 9. Hook -->
+<h2 id="s9">9. Hook 钩子</h2>
+<p>Hook 在特定事件触发时自动执行脚本。</p>
+<p>直接告诉 Claude Code 帮你设置：</p>
+<pre><code>设置一个 hook，每次完成任务之后都自动执行一个声音脚本，发出提示音"叮"进行提醒</code></pre>
+<pre><code>设置一个 hook，每次提交代码之前都自动触发代码格式的检查</code></pre>
+
+<!-- 10. Plugin -->
+<h2 id="s10">10. Plugin 插件</h2>
+<p>Plugin 是打包了 Skill、SubAgent、Hook、MCP 的整合概念。</p>
+<pre><code>/plugin</code></pre>
+<p>在插件管理界面可以：发现新插件 · 管理已下载插件 · 新增插件生态</p>
+
+<!-- 11. Skills -->
+<h2 id="s11">11. Skills 技能</h2>
+<p>Skills 是 Claude Code 的可复用能力模块。</p>
+
+<h3>技能市场</h3>
+<ul>
+  <li><strong>Lobehub Skills</strong>：最大的技能合集网站，按分类查找或看精选合集</li>
+  <li><strong>Agent Skills 指南</strong>：网页版教学文档，教你自己创建 Skill</li>
+</ul>
+
+<h3>安装技能</h3>
+<table>
+  <tr><th>级别</th><th>路径</th></tr>
+  <tr><td>项目级</td><td>项目根目录 <code>.claude/skills/</code></td></tr>
+  <tr><td>全局级</td><td><code>~/.claude/skills/</code></td></tr>
+</table>
+
+<h3>创建自己的 Skill</h3>
+<p>Skill 本质是一个 Markdown 文件，包含 name、description、instructions 三个核心字段。</p>
+
+<!-- 12. MCP -->
+<h2 id="s12">12. MCP 扩展</h2>
+<p>MCP（Model Context Protocol）让 Claude Code 连接外部工具。</p>
+<table>
+  <tr><th>工具</th><th>功能</th></tr>
+  <tr><td>GitHub MCP</td><td>Issue/PR 管理、代码搜索</td></tr>
+  <tr><td>Notion MCP</td><td>文档读写、数据库查询</td></tr>
+  <tr><td>飞书 MCP</td><td>消息发送、文档操作</td></tr>
+  <tr><td>Postgres MCP</td><td>数据库直接查询</td></tr>
+  <tr><td>Filesystem MCP</td><td>安全的文件读写</td></tr>
+</table>
+
+<!-- 13. Git -->
+<h2 id="s13">13. Git 设置</h2>
+<p>直接告诉 Claude Code：</p>
+<pre><code>帮我下载 Git，并与我的 GitHub 账号绑定</code></pre>
+<p>根据引导完成即可。</p>
+
+<!-- 14. CLI -->
+<h2 id="s14">14. CLI 工具推荐</h2>
+<p>把下载链接发给 Claude Code，让 CC 全权负责安装和引导：</p>
+<table>
+  <tr><th>CLI 名称</th><th>功能</th></tr>
+  <tr><td><strong>飞书 CLI</strong></td><td>消息、文档、多维表格等 200+ 命令 + 24 个 AI Agent Skills</td></tr>
+  <tr><td><strong>OpenCLI</strong></td><td>万能命令行工具</td></tr>
+</table>
+
+<!-- 15. 双Agent协同 -->
+<h2 id="s15">15. 双 Agent 协同配置</h2>
 <p>如果同时使用 Hermes，在 CLAUDE.md 中加入：</p>
 <pre><code>## Co-Agent: Hermes
 
@@ -183,37 +397,44 @@ This workspace has Hermes Agent installed as a co-agent.
 - 定时/周期任务 → Hermes cronjob
 - 多平台消息 → Hermes gateway</code></pre>
 
-<h2>6. 验证</h2>
+<!-- 16. 验证 -->
+<h2 id="s16">16. 验证</h2>
 <pre><code>cd /path/to/your/project
 claude</code></pre>
 <p>输入：</p>
 <pre><code>你好，帮我看看这个项目的文件结构</code></pre>
-<p>Claude Code 应该能读取项目文件并回复。</p>
-<p>检查 CLAUDE.md 是否生效：</p>
+<p>测试 CLAUDE.md 是否生效：</p>
 <pre><code>你读取了我的 CLAUDE.md 吗？复述一下你对我的了解。</code></pre>
 
-<h2>7. 常见问题</h2>
+<!-- 17. 常见问题 -->
+<h2 id="s17">17. 常见问题</h2>
 <table>
   <tr><th>问题</th><th>排查</th></tr>
-  <tr><td><code>command not found: claude</code></td><td>npm 全局路径不在 PATH，检查 <code>npm config get prefix</code></td></tr>
+  <tr><td><code>command not found: claude</code></td><td>npm 全局路径不在 PATH；Windows 检查环境变量</td></tr>
   <tr><td><code>401 Unauthorized</code></td><td>API Key 不对或 <code>ANTHROPIC_BASE_URL</code> 配错</td></tr>
-  <tr><td>走 DeepSeek 模型名报错</td><td>Claude Code 默认调 Claude 模型，需在 DeepSeek 侧映射</td></tr>
+  <tr><td>走 DeepSeek 模型名报错</td><td>Claude Code 默认调 Claude 模型，需映射</td></tr>
   <tr><td>权限被拒</td><td>工作目录需读写权限</td></tr>
   <tr><td>启动慢</td><td>首次启动下载依赖，等 1-2 分钟</td></tr>
+  <tr><td>上下文满了</td><td><code>/compact</code> 压缩或 <code>/clear</code> 清空</td></tr>
+  <tr><td>忘记之前做到哪了</td><td><code>/resume</code> 恢复历史会话</td></tr>
 </table>
 
-<h2>8. 安装完成检查清单</h2>
+<!-- 18. 检查清单 -->
+<h2 id="s18">18. 安装完成检查清单</h2>
 <ul class="checklist">
   <li>✅ <code>claude --version</code> 输出版本号</li>
-  <li>✅ <code>ANTHROPIC_API_KEY</code> 环境变量已设置</li>
+  <li>✅ API Key 环境变量已设置</li>
   <li>✅ <code>~/.claude/CLAUDE.md</code> 已定制</li>
   <li>✅ 项目根目录 <code>CLAUDE.md</code> 已按需创建</li>
   <li>✅ <code>claude</code> 启动后能正常对话</li>
+  <li>✅ statusLine 已配好（上下文使用率可见）</li>
   <li>✅ 双 Agent 分工规则已写入 CLAUDE.md</li>
+  <li>✅ CC Switch 已安装（可选）</li>
+  <li>✅ Git 已绑定 GitHub（可选）</li>
 </ul>
 
 <hr>
-<p style="text-align:center;color:var(--text-dim)">配置完成 → 下一步阅读 <a href="dual-agent-handbook.html">双 Agent 协同使用手册</a></p>
+<p style="text-align:center;color:var(--text-dim)">掌握 Claude Code → 下一步阅读 <a href="dual-agent-handbook.html">双 Agent 协同使用手册</a></p>
 
 <footer>AgentX · 让 AI 为你工作</footer>
 </body>
