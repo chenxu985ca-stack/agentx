@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 安装与配置指南 · AgentX</title>
+<style>
+  :root {
+    --bg: #0a0a12; --surface: #12121f; --border: #1e1e35;
+    --text: #e4e4ec; --text-dim: #8888a8; --accent: #7c3aed;
+    --accent-light: #a78bfa; --blue: #60a5fa; --code-bg: #0d0d1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.8;
+    max-width: 760px; margin: 0 auto; padding: 24px 20px 60px;
+  }
+  header { text-align: center; padding: 40px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .logo {
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 28px; font-weight: 800; letter-spacing: 8px;
+    background: linear-gradient(135deg, #7c3aed, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { color: var(--text-dim); font-size: 14px; margin-top: 8px; }
+  h1 { font-size: 22px; margin: 32px 0 16px; color: #fff; }
+  h2 { font-size: 18px; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); color: var(--accent-light); }
+  h3 { font-size: 15px; margin: 24px 0 10px; color: var(--blue); }
+  p { margin: 10px 0; color: var(--text-dim); }
+  strong { color: #fff; }
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace; font-size: 13px; color: var(--accent-light);
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; overflow-x: auto;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace; font-size: 13px;
+    line-height: 1.6; margin: 14px 0;
+  }
+  pre code { background: none; padding: 0; color: var(--text); }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th { background: var(--surface); text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--accent); color: #fff; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  blockquote {
+    border-left: 3px solid var(--accent); padding: 8px 16px; margin: 14px 0;
+    background: rgba(124,58,237,0.05); border-radius: 0 6px 6px 0; color: var(--text-dim);
+  }
+  ul, ol { padding-left: 22px; margin: 10px 0; color: var(--text-dim); }
+  li { margin: 6px 0; }
+  a { color: var(--accent-light); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  footer { text-align: center; color: var(--text-dim); font-size: 13px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .warn {
+    background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 14px;
+  }
+  .warn::before { content: "⚠️ "; }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding: 4px 0; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px; margin: 16px 0;
+  }
+  .card h3 { margin-top: 0; }
+  @media (max-width: 480px) {
+    body { padding: 16px 14px 40px; }
+    pre { font-size: 12px; padding: 12px 14px; }
+    h1 { font-size: 20px; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AGENTX</div>
+  <div class="subtitle">Claude Code 安装与配置指南</div>
+</header>
+
+<h1>💻 Claude Code 安装与配置</h1>
+<p>适用于 macOS / Linux · 预计 20 分钟完成</p>
+
+<h2>1. 前置要求</h2>
+<table>
+  <tr><th>条件</th><th>检查方式</th></tr>
+  <tr><td>macOS 或 Linux</td><td><code>uname -a</code></td></tr>
+  <tr><td>Node.js ≥ 18</td><td><code>node --version</code></td></tr>
+  <tr><td>npm 已安装</td><td><code>npm --version</code></td></tr>
+  <tr><td>有 API Key</td><td>DeepSeek 或 Anthropic</td></tr>
+</table>
+<blockquote>如果没有 Node.js：<code>brew install node</code>（macOS）或 <code>apt install nodejs</code>（Linux）</blockquote>
+
+<h2>2. 安装 Claude Code</h2>
+<h3>npm 全局安装</h3>
+<pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+
+<h3>验证安装</h3>
+<pre><code>claude --version</code></pre>
+
+<h2>3. 配置 API</h2>
+
+<div class="card">
+<h3>方案 A：使用 DeepSeek API（推荐）</h3>
+<p>性价比更高，国内访问快：</p>
+<pre><code>export ANTHROPIC_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/v1</code></pre>
+<p>写入 shell 配置使其永久生效：</p>
+<pre><code># macOS 用 .zshrc，Linux 可能是 .bashrc
+cat >> ~/.zshrc << 'EOF'
+export ANTHROPIC_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/v1
+EOF
+
+source ~/.zshrc</code></pre>
+</div>
+
+<div class="card">
+<h3>方案 B：使用 Anthropic API（官方）</h3>
+<pre><code>export ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+<p>不需要设置 <code>ANTHROPIC_BASE_URL</code>。</p>
+</div>
+
+<h2>4. 配置 CLAUDE.md</h2>
+<p>CLAUDE.md 是 Claude Code 的项目规则文件，启动时自动读取。</p>
+
+<h3>全局配置（所有项目生效）</h3>
+<pre><code>nano ~/.claude/CLAUDE.md</code></pre>
+<pre><code># CLAUDE.md
+
+## About Me
+
+- 角色：全栈独立开发者
+- 技术栈：Next.js / TypeScript / PostgreSQL
+- 偏好：代码注释用英文，commit message 用英文
+- 回复用中文
+
+## Work Style
+
+- 修改代码前先读文件
+- 保持与周围代码风格一致
+- 优先使用项目已有的工具库</code></pre>
+
+<h3>项目级配置（单个项目生效）</h3>
+<pre><code>cd /path/to/your/project
+nano CLAUDE.md</code></pre>
+<p>示例（Node.js 项目）：</p>
+<pre><code># CLAUDE.md
+
+## Project Info
+
+- Next.js 14 App Router
+- TypeScript strict mode
+- pnpm as package manager
+- Testing: Vitest + Playwright
+
+## Rules
+
+- Use server components by default
+- API routes in app/api/, follow RESTful
+- Run tests before committing</code></pre>
+
+<h2>5. 双 Agent 协同配置</h2>
+<p>如果同时使用 Hermes，在 CLAUDE.md 中加入：</p>
+<pre><code>## Co-Agent: Hermes
+
+This workspace has Hermes Agent installed as a co-agent.
+
+### Division of Labor
+
+| Claude Code | Hermes |
+|---|---|
+| Code writing, editing, refactoring | Web research & info gathering |
+| Git operations, commits, PRs | Scheduled/cron tasks |
+| Debugging, testing, code review | Multi-platform messaging |
+| File system operations | Long-running workflows |
+
+### When to Suggest Hermes
+
+- 搜索类任务 → 建议用 Hermes
+- 定时/周期任务 → Hermes cronjob
+- 多平台消息 → Hermes gateway</code></pre>
+
+<h2>6. 验证</h2>
+<pre><code>cd /path/to/your/project
+claude</code></pre>
+<p>输入：</p>
+<pre><code>你好，帮我看看这个项目的文件结构</code></pre>
+<p>Claude Code 应该能读取项目文件并回复。</p>
+<p>检查 CLAUDE.md 是否生效：</p>
+<pre><code>你读取了我的 CLAUDE.md 吗？复述一下你对我的了解。</code></pre>
+
+<h2>7. 常见问题</h2>
+<table>
+  <tr><th>问题</th><th>排查</th></tr>
+  <tr><td><code>command not found: claude</code></td><td>npm 全局路径不在 PATH，检查 <code>npm config get prefix</code></td></tr>
+  <tr><td><code>401 Unauthorized</code></td><td>API Key 不对或 <code>ANTHROPIC_BASE_URL</code> 配错</td></tr>
+  <tr><td>走 DeepSeek 模型名报错</td><td>Claude Code 默认调 Claude 模型，需在 DeepSeek 侧映射</td></tr>
+  <tr><td>权限被拒</td><td>工作目录需读写权限</td></tr>
+  <tr><td>启动慢</td><td>首次启动下载依赖，等 1-2 分钟</td></tr>
+</table>
+
+<h2>8. 安装完成检查清单</h2>
+<ul class="checklist">
+  <li>✅ <code>claude --version</code> 输出版本号</li>
+  <li>✅ <code>ANTHROPIC_API_KEY</code> 环境变量已设置</li>
+  <li>✅ <code>~/.claude/CLAUDE.md</code> 已定制</li>
+  <li>✅ 项目根目录 <code>CLAUDE.md</code> 已按需创建</li>
+  <li>✅ <code>claude</code> 启动后能正常对话</li>
+  <li>✅ 双 Agent 分工规则已写入 CLAUDE.md</li>
+</ul>
+
+<hr>
+<p style="text-align:center;color:var(--text-dim)">配置完成 → 下一步阅读 <a href="dual-agent-handbook.html">双 Agent 协同使用手册</a></p>
+
+<footer>AgentX · 让 AI 为你工作</footer>
+</body>
+</html>

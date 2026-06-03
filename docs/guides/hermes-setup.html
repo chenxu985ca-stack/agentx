@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Agent 安装与配置指南 · AgentX</title>
+<style>
+  :root {
+    --bg: #0a0a12; --surface: #12121f; --border: #1e1e35;
+    --text: #e4e4ec; --text-dim: #8888a8; --accent: #7c3aed;
+    --accent-light: #a78bfa; --blue: #60a5fa; --green: #34d399;
+    --amber: #f59e0b; --red: #ef4444; --code-bg: #0d0d1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.8;
+    max-width: 760px; margin: 0 auto; padding: 24px 20px 60px;
+  }
+  header { text-align: center; padding: 40px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .logo {
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+    font-size: 28px; font-weight: 800; letter-spacing: 8px;
+    background: linear-gradient(135deg, #7c3aed, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { color: var(--text-dim); font-size: 14px; margin-top: 8px; }
+  h1 { font-size: 22px; margin: 32px 0 16px; color: #fff; }
+  h2 { font-size: 18px; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); color: var(--accent-light); }
+  h3 { font-size: 15px; margin: 24px 0 10px; color: var(--blue); }
+  p { margin: 10px 0; color: var(--text-dim); }
+  strong { color: #fff; }
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 4px;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace; font-size: 13px; color: var(--accent-light);
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; overflow-x: auto;
+    font-family: "SF Mono", "JetBrains Mono", Consolas, monospace; font-size: 13px;
+    line-height: 1.6; margin: 14px 0;
+  }
+  pre code { background: none; padding: 0; color: var(--text); }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th { background: var(--surface); text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--accent); color: #fff; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  blockquote {
+    border-left: 3px solid var(--accent); padding: 8px 16px; margin: 14px 0;
+    background: rgba(124,58,237,0.05); border-radius: 0 6px 6px 0; color: var(--text-dim);
+  }
+  ul, ol { padding-left: 22px; margin: 10px 0; color: var(--text-dim); }
+  li { margin: 6px 0; }
+  a { color: var(--accent-light); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  footer { text-align: center; color: var(--text-dim); font-size: 13px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .warn {
+    background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 14px;
+  }
+  .warn::before { content: "⚠️ "; }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding: 4px 0; }
+  @media (max-width: 480px) {
+    body { padding: 16px 14px 40px; }
+    pre { font-size: 12px; padding: 12px 14px; }
+    h1 { font-size: 20px; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AGENTX</div>
+  <div class="subtitle">Hermes Agent 安装与配置指南</div>
+</header>
+
+<h1>📦 Hermes Agent 安装与配置</h1>
+<p>适用 macOS / Linux · 预计 30 分钟完成</p>
+
+<h2>1. 前置要求</h2>
+<table>
+  <tr><th>条件</th><th>检查方式</th></tr>
+  <tr><td>macOS 或 Linux</td><td><code>uname -a</code></td></tr>
+  <tr><td>终端可访问外网</td><td><code>curl -I https://github.com</code></td></tr>
+  <tr><td>有 DeepSeek API Key</td><td>DeepSeek 后台 → API Keys</td></tr>
+</table>
+<blockquote>如果没有 DeepSeek Key：去 <a href="https://platform.deepseek.com">platform.deepseek.com</a> 注册 → 充值 ¥10 起 → 创建 API Key</blockquote>
+
+<h2>2. 安装 Hermes</h2>
+<h3>一键安装</h3>
+<pre><code>curl -fsSL https://ghfast.top/https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash</code></pre>
+<blockquote><code>ghfast.top</code> 是 GitHub 镜像加速，国内用户也能正常下载。</blockquote>
+
+<h3>验证安装</h3>
+<pre><code>source ~/.zshrc
+hermes --version</code></pre>
+<p>看到版本号（如 <code>v0.15.1</code>）即安装成功。</p>
+
+<h2>3. 配置 Hermes</h2>
+
+<h3>3.1 配置模型</h3>
+<pre><code>nano ~/.hermes/config.yaml</code></pre>
+<p>写入：</p>
+<pre><code>model:
+  default: deepseek-v4-pro
+  provider: deepseek
+  base_url: https://api.deepseek.com/v1</code></pre>
+
+<div class="warn">provider 必须写 <code>deepseek</code>，不能写 <code>custom</code>。Hermes 有原生 DeepSeek 适配。</div>
+
+<h3>3.2 配置 API Key</h3>
+<pre><code>nano ~/.hermes/.env</code></pre>
+<p>写入：</p>
+<pre><code>DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+
+<div class="warn">环境变量名是 <code>DEEPSEEK_API_KEY</code>，不是 <code>OPENAI_API_KEY</code>。</div>
+
+<h3>3.3 设置文件权限</h3>
+<pre><code>chmod 600 ~/.hermes/.env</code></pre>
+
+<h2>4. 验证配置</h2>
+<pre><code>hermes</code></pre>
+<p>输入：</p>
+<pre><code>你好，请用中文回复，说一句"配置成功"</code></pre>
+<p>收到正确回复即配置完成。</p>
+
+<h3>常见启动报错</h3>
+<table>
+  <tr><th>报错</th><th>原因</th><th>解决</th></tr>
+  <tr><td><code>command not found: hermes</code></td><td>未加入 PATH</td><td><code>source ~/.zshrc</code></td></tr>
+  <tr><td><code>401 Unauthorized</code></td><td>API Key 错误</td><td>检查 <code>.env</code> 里 Key 是否正确</td></tr>
+  <tr><td><code>model not found</code></td><td>模型名写错</td><td>确认是 <code>deepseek-v4-pro</code>，不是 <code>deepseek-chat</code></td></tr>
+  <tr><td><code>connection refused</code></td><td>网络不通</td><td>检查代理或换 base_url</td></tr>
+</table>
+
+<h2>5. 定制记忆文件</h2>
+
+<h3>USER.md（告诉 Hermes 你是谁）</h3>
+<pre><code>nano ~/.hermes/USER.md</code></pre>
+<pre><code># About Me
+
+- 角色：全栈独立开发者
+- 技术栈：Next.js / TypeScript / PostgreSQL
+- 工作语言：中文
+- 偏好：回复用中文，代码注释用英文</code></pre>
+
+<h3>MEMORY.md（记录重要信息）</h3>
+<pre><code>nano ~/.hermes/MEMORY.md</code></pre>
+<pre><code># Environment
+
+- OS: macOS 14
+- Shell: zsh
+- Editor: VS Code
+- 工作目录: ~/projects/</code></pre>
+
+<h2>6. 配置镜像加速</h2>
+<pre><code>nano ~/.hermes/config.yaml</code></pre>
+<p>添加：</p>
+<pre><code>github:
+  mirror: https://ghfast.top/</code></pre>
+
+<h2>7. 安装完成检查清单</h2>
+<ul class="checklist">
+  <li>✅ <code>hermes --version</code> 输出版本号</li>
+  <li>✅ <code>hermes</code> 启动后能正常对话</li>
+  <li>✅ <code>/model</code> 可以看到 deepseek-v4-pro</li>
+  <li>✅ USER.md 和 MEMORY.md 已定制</li>
+  <li>✅ <code>.env</code> 权限为 600</li>
+</ul>
+
+<hr>
+<p style="text-align:center;color:var(--text-dim)">配置完成 → 下一步阅读 <a href="quickstart.html">快速使用指南</a></p>
+
+<footer>AgentX · 让 AI 为你工作</footer>
+</body>
+</html>

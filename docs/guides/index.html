@@ -64,6 +64,11 @@
   .badge-basic { background: rgba(52,211,153,0.15); color: #34d399; }
   .badge-pro { background: rgba(96,165,250,0.15); color: #60a5fa; }
   .badge-enterprise { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .badge-setup { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--text-dim); margin: 32px 0 12px; text-align: left;
+  }
   footer { color: var(--text-dim); font-size: 13px; margin-top: 48px; }
   a { color: var(--accent-light); }
 </style>
@@ -71,7 +76,21 @@
 <body>
 
 <div class="logo">AGENTX</div>
-<div class="subtitle">选择你的使用手册</div>
+<div class="subtitle">安装配置 & 使用手册</div>
+
+<div class="section-label">📦 安装配置</div>
+
+<div class="card">
+  <h2><a href="hermes-setup.html">📦 Hermes 安装与配置 <span class="badge badge-setup">安装</span></a></h2>
+  <p>Hermes Agent 从零安装：一键脚本、模型配置、API Key、镜像加速、记忆文件定制</p>
+</div>
+
+<div class="card">
+  <h2><a href="claude-code-setup.html">💻 Claude Code 安装与配置 <span class="badge badge-setup">安装</span></a></h2>
+  <p>Claude Code 从零安装：npm 安装、API 配置（DeepSeek/Anthropic）、CLAUDE.md 定制、双 Agent 协同</p>
+</div>
+
+<div class="section-label">📖 使用手册</div>
 
 <div class="card">
   <h2><a href="quickstart.html">🚀 快速使用指南 <span class="badge badge-basic">基础版</span></a></h2>
