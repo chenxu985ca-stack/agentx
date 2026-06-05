@@ -324,20 +324,48 @@ section { padding: 80px 24px; position: relative; }
 
 /* ═══ Footer ═══ */
 footer {
-  text-align: center; padding: 40px 24px;
+  position: relative;
+  text-align: center; padding: 48px 24px 36px;
   color: var(--text-muted); font-size: 13px;
-  border-top: 1px solid var(--border);
   background: var(--surface2);
+}
+footer::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #7c3aed, #3b82f6, #16a34a);
 }
 footer .brand {
   font-family: "SF Mono", "JetBrains Mono", monospace;
-  font-size: 18px; font-weight: 800; letter-spacing: 6px;
+  font-size: 22px; font-weight: 800; letter-spacing: 6px;
   background: linear-gradient(135deg, #7c3aed, #3b82f6);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
-footer a { color: var(--purple); text-decoration: none; }
+footer a { color: var(--purple); text-decoration: none; font-size: 15px; font-weight: 600; }
 footer a:hover { text-decoration: underline; }
+footer .footer-links { margin-bottom: 12px; }
+
+/* ═══ CTA ═══ */
+.cta-section { text-align: center; padding: 100px 24px; }
+.cta-section h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 800; margin-bottom: 14px; }
+.cta-section > p { color: var(--text-dim); margin-bottom: 36px; font-size: 16px; }
+.cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  padding: 14px 32px; border-radius: 12px;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff; text-decoration: none; font-weight: 700; font-size: 16px;
+  transition: all var(--transition);
+  box-shadow: 0 4px 20px rgba(124,58,237,0.25);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.4); }
+.btn-outline {
+  padding: 14px 32px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--surface);
+  color: var(--text); text-decoration: none; font-weight: 600; font-size: 16px;
+  transition: all var(--transition);
+}
+.btn-outline:hover { border-color: var(--purple); color: var(--purple); }
 
 /* ═══ Responsive ═══ */
 @media (max-width: 900px) {
@@ -355,6 +383,32 @@ footer a:hover { text-decoration: underline; }
   .platform-links { flex-direction: column; align-items: center; }
   nav { padding: 0 16px; }
   .nav-back { display: none; }
+}
+
+/* ═══════════════════════════════════════════
+   Print Styles (white bg, no decorations)
+   ═══════════════════════════════════════════ */
+@media print {
+  .ambient, nav, .navbar, #navbar, .theme-btn, #themeToggle, footer { display: none !important; }
+  body { background: white !important; color: #111 !important; font-size: 12pt !important; line-height: 1.6 !important; overflow-x: visible !important; }
+  :root, [data-theme="dark"], html {
+    --bg: white !important; --bg2: #f8f8f8 !important; --surface: white !important; --surface2: #f5f5f5 !important;
+    --border: #ddd !important; --border-hover: #bbb !important; --text: #111 !important; --text-dim: #444 !important;
+    --text-muted: #777 !important; --purple-light: #f3f0ff !important; --blue-light: #eff6ff !important;
+    --gold-light: #fffbeb !important; --red-light: #fef2f2 !important; --nav-bg: white !important;
+    --shadow: none !important; --shadow-md: none !important; --shadow-lg: none !important;
+    --glow-purple: transparent !important; --glow-blue: transparent !important;
+    --code-bg: #f5f5f5 !important; --code-text: #222 !important; --code-border: #ddd !important;
+    --radius: 4px !important; --radius-sm: 2px !important; --transition: none !important;
+  }
+  .code-block { background: #f5f5f5 !important; border: 1px solid #ddd !important; break-inside: avoid !important; }
+  .code-block pre, .code-block code { color: #222 !important; font-size: 10pt !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  h2 { break-after: avoid !important; } h3 { break-after: avoid !important; }
+  .step, .faq-item, .callout, .code-block { break-inside: avoid !important; }
+  .tab-panel { display: block !important; } .tabs { display: none !important; }
+  a { color: #7c3aed !important; text-decoration: underline !important; }
+  .card, .step, .callout, section { box-shadow: none !important; break-inside: avoid !important; }
 }
 </style>
 </head>
@@ -807,10 +861,26 @@ hermes skills install software-development</pre>
   </div>
 </section>
 
+<!-- ═══ CTA ═══ -->
+<section class="cta-section">
+  <h2 class="reveal">不想自己折腾？</h2>
+  <p class="reveal reveal-delay-1">我帮你装好配好 Claude Code + Codex + Hermes 全家桶。<br>你只需要坐下来用就行。</p>
+  <div class="cta-buttons reveal reveal-delay-2">
+    <a href="index.html#pricing" class="btn-primary">查看服务方案 →</a>
+    <a href="index.html#cta" class="btn-outline">直接联系我</a>
+  </div>
+</section>
+
 <!-- ═══ Footer ═══ -->
 <footer>
   <div class="brand">AGENTX</div>
-  <p><a href="index.html">← 返回首页</a> &nbsp;·&nbsp; <a href="claude-code-guide.html">Claude Code 安装指南</a> &nbsp;·&nbsp; © 2026 AgentX</p>
+  <p class="footer-links">
+    <a href="index.html">← 返回首页</a> &nbsp;·&nbsp;
+    <a href="codex-guide.html">Codex 安装指南</a> &nbsp;·&nbsp;
+    <a href="claude-code-guide.html">Claude Code 安装指南</a> &nbsp;·&nbsp;
+    <a href="hermes-guide.html">Hermes 安装指南</a>
+  </p>
+  <p style="margin-top:8px;">© 2026 AgentX · 三引擎 AI 部署服务</p>
 </footer>
 
 </main>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgentX — 双引擎 AI 团队部署</title>
+<title>AgentX — 三引擎 AI 部署服务</title>
 <link rel="icon" type="image/svg+xml" href="brand/avatar.svg">
 <link rel="alternate icon" type="image/png" href="brand/favicon.png">
 <style>
@@ -275,6 +275,51 @@
   }
   .btn-outline:hover { border-color: var(--purple); color: var(--purple); }
 
+  /* ═══ About ═══ */
+  .about-card {
+    display: flex; gap: 40px; align-items: center;
+    max-width: 760px; margin: 0 auto;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid rgba(124,58,237,0.3);
+    border-radius: var(--radius); padding: 40px;
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+  }
+  .about-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-md); }
+  .about-avatar { position: relative; flex-shrink: 0; }
+  .avatar-placeholder {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(59,130,246,0.1));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px; flex-shrink: 0;
+    border: 2px solid rgba(124,58,237,0.2);
+    position: relative;
+    transition: all var(--transition);
+  }
+  .about-avatar::after {
+    content: '';
+    position: absolute; inset: -5px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(59,130,246,0.05));
+    animation: avatarGlow 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes avatarGlow {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+  .about-text { font-size: 15px; line-height: 1.9; color: var(--text-dim); }
+  .about-text p { margin-bottom: 10px; }
+  .about-text p:last-child { margin-bottom: 0; }
+  .about-text strong {
+    color: var(--text); font-weight: 700;
+    background: linear-gradient(135deg, rgba(124,58,237,0.06), transparent);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  @media (max-width: 640px) {
+    .about-card { flex-direction: column; text-align: center; padding: 28px 22px; }
+    .about-text { font-size: 14px; }
+  }
+
   /* ═══ Pricing ═══ */
   .pricing-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -357,6 +402,29 @@
     background: var(--gold-light); border: 1px solid rgba(245,158,11,0.2);
     color: var(--gold); font-size: 14px; font-weight: 600;
   }
+
+  /* ═══ Proof ═══ */
+  .proof-card {
+    max-width: 680px; margin: 0 auto;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid rgba(124,58,237,0.25);
+    border-radius: var(--radius); padding: 36px 40px;
+    box-shadow: var(--shadow); position: relative;
+    overflow: hidden;
+    transition: all var(--transition);
+  }
+  .proof-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-md); }
+  .proof-card::before {
+    content: '"';
+    position: absolute; top: -6px; left: 18px;
+    font-size: 80px; font-family: Georgia, serif;
+    color: var(--purple); opacity: 0.1; line-height: 1;
+    pointer-events: none;
+  }
+  .proof-body { position: relative; }
+  .proof-body p { font-size: 15px; line-height: 1.9; color: var(--text-dim); margin-bottom: 12px; }
+  .proof-body p:last-child { margin-bottom: 0; }
+  .proof-body strong { color: var(--text); font-weight: 700; }
 
   /* ═══ Process ═══ */
   .process-row {
@@ -476,21 +544,26 @@
 
   /* ═══ Footer ═══ */
   footer {
-    text-align: center; padding: 40px 24px;
+    position: relative;
+    text-align: center; padding: 48px 24px 36px;
     color: var(--text-muted); font-size: 13px;
-    border-top: 1px solid var(--border);
     background: var(--surface2);
+  }
+  footer::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #3b82f6, #16a34a);
   }
   footer .brand {
     font-family: "SF Mono", "JetBrains Mono", monospace;
-    font-size: 18px; font-weight: 800; letter-spacing: 6px;
+    font-size: 22px; font-weight: 800; letter-spacing: 6px;
     background: linear-gradient(135deg, #7c3aed, #3b82f6);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
-  footer a { color: var(--purple); text-decoration: none; font-size: 14px; font-weight: 600; }
+  footer a { color: var(--purple); text-decoration: none; font-size: 15px; font-weight: 600; }
   footer a:hover { text-decoration: underline; }
-  footer .footer-links { margin-bottom: 10px; }
+  footer .footer-links { margin-bottom: 12px; }
 
   /* ═══ Responsive ═══ */
   @media (max-width: 900px) {
@@ -561,18 +634,18 @@
     </svg>
   </div>
 
-  <div class="hero-badge reveal reveal-delay-1"><span class="dot"></span> Claude Code × Hermes 双引擎协同</div>
+  <div class="hero-badge reveal reveal-delay-1"><span class="dot"></span> Claude Code · Codex · Hermes 三引擎 AI 部署</div>
 
   <h1 class="reveal reveal-delay-1">
     为你的业务<br>
     <span class="hl">部署专属 AI 团队</span>
   </h1>
 
-  <p class="reveal reveal-delay-2">不用啃英文文档、不用踩配置坑。我帮你把最强 AI Agent 装好配好，<br>让你直接拥有 24 小时待命的数字员工。</p>
+  <p class="reveal reveal-delay-2">不用啃英文文档、不用踩配置坑。我帮你把 AI 装好配好，你直接用——<br>像雇了一个不用睡觉的员工。</p>
 
   <div class="hero-stats reveal reveal-delay-2">
     <div class="hero-stat"><div class="num"><span class="count" data-target="24">0</span>h</div><div class="lbl">交付周期</div></div>
-    <div class="hero-stat"><div class="num"><span class="count" data-target="2">0</span></div><div class="lbl">双引擎协同</div></div>
+    <div class="hero-stat"><div class="num"><span class="count" data-target="3">0</span></div><div class="lbl">三引擎协同</div></div>
     <div class="hero-stat"><div class="num"><span class="count" data-target="99">0</span>%</div><div class="lbl">客户满意度</div></div>
   </div>
 
@@ -582,28 +655,46 @@
   </div>
 </section>
 
+<!-- ═══ About ═══ -->
+<section id="about">
+  <div class="section-label reveal">About</div>
+  <h2 class="section-title reveal">我是谁</h2>
+  <p class="section-sub reveal">一个先把自己折腾明白，再帮你折腾明白的人</p>
+
+  <div class="about-card reveal reveal-delay-1">
+    <div class="about-avatar">
+      <div class="avatar-placeholder"><span>🧑‍💻</span></div>
+    </div>
+    <div class="about-text">
+      <p>我叫<strong>李谦益</strong>，大学学的大数据，毕业后来到杭州，做过销售、做过剪辑。</p>
+      <p><strong>Claude Code、Codex、Hermes——每一个我都亲手装过、配过、踩过坑。</strong>花了几十个小时才折腾明白的事，别人不该再花一遍。</p>
+      <p>所以有了 AgentX。不是公司，就是我一个人。<strong>帮不懂技术的人把 AI 真正用起来，是我现在最想做的事。</strong></p>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ Pricing ═══ -->
 <section id="pricing">
   <div class="section-label reveal">Pricing</div>
   <h2 class="section-title reveal">选择适合你的方案</h2>
   <p class="section-sub reveal">从零到 AI Ready，全程远程交付，你只需准备好电脑</p>
-  <div class="early-bird-banner reveal reveal-delay-1">🔥 前 10 单早鸟特惠，满额恢复原价</div>
+  <div class="early-bird-banner reveal reveal-delay-1">🔥 首批客户特惠，满额恢复原价</div>
 
   <div class="pricing-grid">
     <!-- Basic -->
     <div class="pricing-card reveal reveal-delay-1">
       <div class="tier tier-basic">Basic</div>
       <div class="name">基础配置</div>
-      <div class="subtitle">让 Hermes Agent 跑起来</div>
+      <div class="subtitle">先让 AI 跑起来，试试水</div>
       <div class="price-line">
         <span class="price-original">¥599</span>
         <span class="price-now">¥299<span class="early-tag">早鸟</span><sub>/次</sub></span>
       </div>
       <ul>
-        <li>Hermes Agent 安装部署</li>
+        <li>AI 助手安装 + 配置好</li>
         <li>DeepSeek / Claude 模型接入</li>
-        <li>基础 MEMORY & USER 定制</li>
-        <li>CLI 使用教学（30min）</li>
+        <li>基础记忆与个性化设置</li>
+        <li>30 分钟手把手教你会用</li>
         <li>7 天售后支持</li>
       </ul>
       <a href="#cta" class="card-btn outline">预约咨询 →</a>
@@ -613,18 +704,18 @@
     <div class="pricing-card featured reveal reveal-delay-2">
       <div class="card-badge">🔥 最受欢迎</div>
       <div class="tier tier-pro" style="margin-top:8px;">Professional</div>
-      <div class="name">双 Agent 协同</div>
-      <div class="subtitle">Claude Code + Hermes 双引擎</div>
+      <div class="name">三引擎协同</div>
+      <div class="subtitle">Claude Code + Codex 写代码，Hermes 管日常</div>
       <div class="price-line">
         <span class="price-original">¥1,999</span>
         <span class="price-now">¥799<span class="early-tag">早鸟</span><sub>/次</sub></span>
       </div>
       <ul>
         <li>✅ 基础配置全部内容</li>
-        <li>Claude Code 安装与配置</li>
-        <li>双 Agent 协同工作流搭建</li>
-        <li>CLAUDE.md + 项目结构定制</li>
-        <li>20+ 核心技能安装激活</li>
+        <li>Claude Code + Codex 双引擎编码环境搭建</li>
+        <li>三个 AI 配合干活的工作流搭建</li>
+        <li>项目专属 AI 使用手册定制</li>
+        <li>20+ 常用自动化场景配好直接用</li>
         <li>1 小时实操带教</li>
         <li>14 天售后支持</li>
       </ul>
@@ -641,16 +732,31 @@
         <span class="price-now">¥1,999<span class="early-tag">早鸟</span><sub>/次</sub></span>
       </div>
       <ul>
-        <li>✅ 双 Agent 协同全部内容</li>
-        <li>Gateway 多平台接入（微信/飞书/钉钉/Telegram）</li>
-        <li>Cron 定时任务定制（5条）</li>
+        <li>✅ 三引擎协同全部内容</li>
+        <li>微信、飞书、钉钉都能接收 AI 通知</li>
+        <li>每天自动帮你做的重复工作（5个）</li>
         <li>业务专属技能开发（3个）</li>
-        <li>MCP 工具集成</li>
+        <li>第三方工具接入（如飞书文档、Notion）</li>
         <li>安全加固与权限配置</li>
         <li>1 周贴身陪跑</li>
         <li>30 天售后支持</li>
       </ul>
       <a href="#cta" class="card-btn outline-purple">预约咨询 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Proof ═══ -->
+<section>
+  <div class="section-label reveal">Proof</div>
+  <h2 class="section-title reveal">我自己怎么用的</h2>
+  <p class="section-sub reveal">说一万句不如给你看真实的东西</p>
+
+  <div class="proof-card reveal reveal-delay-1">
+    <div class="proof-body">
+      <p>你现在看到的这个网站——从设计到上线——就是我用 <strong>Claude Code + Codex</strong> 写的。</p>
+      <p>AI 帮我写了 99% 的代码，我只需要告诉它要什么。以前要花好几天学的 CSS 动画、明暗主题切换、手机适配——现在直接说「帮我加个滚动渐入效果」「帮我适配手机」，几分钟就搞定。</p>
+      <p><strong>这就是我帮你部署完之后，你自己能做的事情。</strong>不是给你卖一个工具，是把我自己验证过的东西，原样搬到你的电脑上。</p>
     </div>
   </div>
 </section>
@@ -689,13 +795,13 @@
 <section>
   <div class="section-label reveal">Why AgentX</div>
   <h2 class="section-title reveal">为什么选我？</h2>
-  <p class="section-sub reveal">打通 Claude Code + Hermes 双引擎协同，提供完整部署服务</p>
+  <p class="section-sub reveal">把 AI 工具真的用起来，不是只装好看</p>
 
   <div class="features-grid">
     <div class="feature-card reveal reveal-delay-1">
       <span class="feature-icon">🎯</span>
-      <h4>双 Agent 协同专家</h4>
-      <p>唯一打通 Claude Code（写代码）+ Hermes（自动化运营）协同工作流的服务商</p>
+      <h4>三个 AI 配合，效率翻倍</h4>
+      <p>唯一能帮你同时部署 Claude Code、Codex、Hermes 并让它们协同工作的人</p>
     </div>
     <div class="feature-card reveal reveal-delay-2">
       <span class="feature-icon">🔧</span>
@@ -705,12 +811,12 @@
     <div class="feature-card reveal reveal-delay-3">
       <span class="feature-icon">📈</span>
       <h4>越用越强</h4>
-      <p>Hermes 的自进化机制让 Agent 每天都更懂你的业务，部署价值持续增长</p>
+      <p>AI 越用越懂你，第一天省 1 小时，一个月后省 3 小时</p>
     </div>
     <div class="feature-card reveal reveal-delay-1">
       <span class="feature-icon">🛡️</span>
       <h4>安全第一</h4>
-      <p>本地部署、数据不出电脑、零遥测。API Key 加密存储，7 层安全防线</p>
+      <p>本地部署、数据不出电脑、零遥测。API Key 加密存储，你的数据只有你能访问</p>
     </div>
     <div class="feature-card reveal reveal-delay-2">
       <span class="feature-icon">💬</span>
@@ -790,10 +896,11 @@
 <footer>
   <div class="brand">AGENTX</div>
   <p class="footer-links">
-    📖 <a href="hermes-guide.html">Hermes 安装指南</a> &nbsp;·&nbsp;
-    📖 <a href="claude-code-guide.html">Claude Code 安装指南</a>
+    <a href="codex-guide.html">Codex 安装指南</a> &nbsp;·&nbsp;
+    <a href="claude-code-guide.html">Claude Code 安装指南</a> &nbsp;·&nbsp;
+    <a href="hermes-guide.html">Hermes 安装指南</a>
   </p>
-  <p style="margin-top:8px;">© 2026 AgentX · 双引擎 AI 团队部署</p>
+  <p style="margin-top:8px;">© 2026 AgentX · 三引擎 AI 部署服务</p>
 </footer>
 
 </main>
